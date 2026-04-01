@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Layture — Instagram & Ads Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Antonio:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-left">
+      <h1 class="logo">Layture Analytics</h1>
+      <span class="badge">Live</span>
+    </div>
+    <div class="header-right">
+      <select id="dateRange" class="select-control">
+        <option value="7">Last 7 Days</option>
+        <option value="14">Last 14 Days</option>
+        <option value="30" selected>Last 30 Days</option>
+        <option value="60">Last 60 Days</option>
+        <option value="90">Last 90 Days</option>
+      </select>
+      <span id="lastUpdated" class="last-updated">Updated: --</span>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <nav class="tabs">
+    <button class="tab active" data-tab="overview">Overview</button>
+    <button class="tab" data-tab="organic">Organic</button>
+    <button class="tab" data-tab="ads">Ads</button>
+    <button class="tab" data-tab="content">Content</button>
+  </nav>
+
+  <!-- Overview Tab -->
+  <main id="tab-overview" class="tab-content active">
+    <!-- KPI Cards -->
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Followers</div>
+        <div class="kpi-value" id="kpi-followers">--</div>
+        <div class="kpi-change" id="kpi-followers-change"></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Reach</div>
+        <div class="kpi-value" id="kpi-reach">--</div>
+        <div class="kpi-change" id="kpi-reach-change"></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Impressions</div>
+        <div class="kpi-value" id="kpi-impressions">--</div>
+        <div class="kpi-change" id="kpi-impressions-change"></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Engagement Rate</div>
+        <div class="kpi-value" id="kpi-engagement">--</div>
+        <div class="kpi-change" id="kpi-engagement-change"></div>
+      </div>
+      <div class="kpi-card accent">
+        <div class="kpi-label">Ad Spend</div>
+        <div class="kpi-value" id="kpi-spend">--</div>
+        <div class="kpi-change" id="kpi-spend-change"></div>
+      </div>
+      <div class="kpi-card accent">
+        <div class="kpi-label">ROAS</div>
+        <div class="kpi-value" id="kpi-roas">--</div>
+        <div class="kpi-change" id="kpi-roas-change"></div>
+      </div>
+    </section>
+
+    <!-- Charts Row -->
+    <section class="chart-grid">
+      <div class="chart-card wide">
+        <h3 class="chart-title">Followers Growth</h3>
+        <canvas id="chart-followers"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3 class="chart-title">Reach vs Impressions</h3>
+        <canvas id="chart-reach-impressions"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3 class="chart-title">Spend vs Results</h3>
+        <canvas id="chart-spend-results"></canvas>
+      </div>
+    </section>
+  </main>
+
+  <!-- Organic Tab -->
+  <main id="tab-organic" class="tab-content">
+    <section class="chart-grid">
+      <div class="chart-card wide">
+        <h3 class="chart-title">Daily Reach & Impressions</h3>
+        <canvas id="chart-organic-reach"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3 class="chart-title">Engagement by Post Type</h3>
+        <canvas id="chart-post-type"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3 class="chart-title">Profile Views</h3>
+        <canvas id="chart-profile-views"></canvas>
+      </div>
+    </section>
+
+    <!-- Top Posts Table -->
+    <section class="table-card">
+      <h3 class="chart-title">Top Posts by Engagement</h3>
+      <div class="table-wrapper">
+        <table id="table-top-posts">
+          <thead>
+            <tr>
+              <th>Date</th><th>Type</th><th>Caption</th>
+              <th>Likes</th><th>Comments</th><th>Saves</th>
+              <th>Shares</th><th>Reach</th><th>Eng. Rate</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- Ads Tab -->
+  <main id="tab-ads" class="tab-content">
+    <section class="kpi-grid">
+      <div class="kpi-card accent">
+        <div class="kpi-label">Total Spend</div>
+        <div class="kpi-value" id="kpi-total-spend">--</div>
+      </div>
+      <div class="kpi-card accent">
+        <div class="kpi-label">Avg CPC</div>
+        <div class="kpi-value" id="kpi-avg-cpc">--</div>
+      </div>
+      <div class="kpi-card accent">
+        <div class="kpi-label">Avg CPM</div>
+        <div class="kpi-value" id="kpi-avg-cpm">--</div>
+      </div>
+      <div class="kpi-card accent">
+        <div class="kpi-label">Avg CTR</div>
+        <div class="kpi-value" id="kpi-avg-ctr">--</div>
+      </div>
+    </section>
+
+    <section class="chart-grid">
+      <div class="chart-card wide">
+        <h3 class="chart-title">Daily Ad Spend</h3>
+        <canvas id="chart-daily-spend"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3 class="chart-title">Spend by Campaign</h3>
+        <canvas id="chart-campaign-spend"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3 class="chart-title">CPC vs CTR Trend</h3>
+        <canvas id="chart-cpc-ctr"></canvas>
+      </div>
+    </section>
+
+    <!-- Campaign Table -->
+    <section class="table-card">
+      <h3 class="chart-title">Campaign Performance</h3>
+      <div class="table-wrapper">
+        <table id="table-campaigns">
+          <thead>
+            <tr>
+              <th>Campaign</th><th>Status</th><th>Impressions</th>
+              <th>Reach</th><th>Clicks</th><th>Spend</th>
+              <th>CPC</th><th>CPM</th><th>CTR</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- Content Tab -->
+  <main id="tab-content" class="tab-content">
+    <section class="chart-grid">
+      <div class="chart-card">
+        <h3 class="chart-title">Reels Performance</h3>
+        <canvas id="chart-reels"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3 class="chart-title">Stories Performance</h3>
+        <canvas id="chart-stories"></canvas>
+      </div>
+    </section>
+
+    <!-- Reels Table -->
+    <section class="table-card">
+      <h3 class="chart-title">Recent Reels</h3>
+      <div class="table-wrapper">
+        <table id="table-reels">
+          <thead>
+            <tr>
+              <th>Date</th><th>Caption</th><th>Plays</th>
+              <th>Reach</th><th>Likes</th><th>Comments</th>
+              <th>Saves</th><th>Shares</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- Loading Overlay -->
+  <div id="loading" class="loading-overlay">
+    <div class="spinner"></div>
+    <p>Loading dashboard data...</p>
+  </div>
+
+  <!-- Error Banner -->
+  <div id="error-banner" class="error-banner hidden">
+    <span id="error-message"></span>
+    <button onclick="this.parentElement.classList.add('hidden')">Dismiss</button>
+  </div>
+
+  <!-- Scripts loaded in chunks -->
+  <script src="config.js"></script>
+  <script src="charts.js"></script>
+  <script src="ads.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
