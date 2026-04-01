@@ -12,7 +12,7 @@
 
 const DASHBOARD_CONFIG = {
   // Replace these URLs with your published Google Sheet CSV links
-  // Format: https://docs.google.com/spreadsheets/d/e/2PACX-1vRbeTPHgv7YwyJuDuUmUqvNfU_XA3RJ-qwmUcDaUUMTv-brGsLQMcSfz31oFuPXo2rXD725gUOWM5wT/pub?output=csv
+  // Format: 
   sheets: {
     profile:    'https://docs.google.com/spreadsheets/d/e/2PACX-1vRbeTPHgv7YwyJuDuUmUqvNfU_XA3RJ-qwmUcDaUUMTv-brGsLQMcSfz31oFuPXo2rXD725gUOWM5wT/pub?gid=89648221&single=true&output=csv',
     posts:      'https://docs.google.com/spreadsheets/d/e/2PACX-1vRbeTPHgv7YwyJuDuUmUqvNfU_XA3RJ-qwmUcDaUUMTv-brGsLQMcSfz31oFuPXo2rXD725gUOWM5wT/pub?gid=580996054&single=true&output=csv',
