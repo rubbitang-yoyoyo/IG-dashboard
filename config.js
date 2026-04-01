@@ -13,6 +13,10 @@
 const DASHBOARD_CONFIG = {
   // Replace these URLs with your published Google Sheet CSV links
   // Format: https://docs.google.com/spreadsheets/d/e/2PACX-1vRbeTPHgv7YwyJuDuUmUqvNfU_XA3RJ-qwmUcDaUUMTv-brGsLQMcSfz31oFuPXo2rXD725gUOWM5wT/pub?output=csv
+  // Set useDemoData to true to preview with fake data
+  // Set to false once you've added real data to your Google Sheet
+  useDemoData: true,
+  
   sheets: {
     profile:    'https://docs.google.com/spreadsheets/d/e/2PACX-1vRbeTPHgv7YwyJuDuUmUqvNfU_XA3RJ-qwmUcDaUUMTv-brGsLQMcSfz31oFuPXo2rXD725gUOWM5wT/pub?gid=89648221&single=true&output=csv',
     posts:      'https://docs.google.com/spreadsheets/d/e/2PACX-1vRbeTPHgv7YwyJuDuUmUqvNfU_XA3RJ-qwmUcDaUUMTv-brGsLQMcSfz31oFuPXo2rXD725gUOWM5wT/pub?gid=580996054&single=true&output=csv',
@@ -24,7 +28,7 @@ const DASHBOARD_CONFIG = {
 
   // Dashboard settings
   currency: 'HKD',
-  currencySymbol: '$',
+  currencySymbol: 'HK$',
   refreshInterval: 300000, // Auto-refresh every 5 minutes (in ms)
 };
 
@@ -93,14 +97,32 @@ async function loadAllData() {
   const sheets = DASHBOARD_CONFIG.sheets;
   const loaders = [];
 
+  // Check if we should use demo data
+  if (DASHBOARD_CONFIG.useDemoData) {
+    console.log('Using demo data (useDemoData = true)');
+    for (const key of Object.keys(sheets)) {
+      DATA[key] = generateDemoData(key);
+    }
+    DATA.loaded = true;
+    return;
+  }
+
   for (const [key, url] of Object.entries(sheets)) {
     if (url && !url.startsWith('YOUR_')) {
       loaders.push(
         fetchSheetData(url)
-          .then(data => { DATA[key] = data; })
+          .then(data => {
+            // If sheet returns empty or just headers, fall back to demo
+            if (!data || data.length === 0) {
+              console.warn(`${key} is empty, using demo data`);
+              DATA[key] = generateDemoData(key);
+            } else {
+              DATA[key] = data;
+            }
+          })
           .catch(err => {
             console.warn(`Failed to load ${key}:`, err);
-            DATA[key] = [];
+            DATA[key] = generateDemoData(key);
           })
       );
     } else {
