@@ -14,12 +14,12 @@ const DASHBOARD_CONFIG = {
   // Replace these URLs with your published Google Sheet CSV links
   // Format: https://docs.google.com/spreadsheets/d/e/2PACX-1vRbeTPHgv7YwyJuDuUmUqvNfU_XA3RJ-qwmUcDaUUMTv-brGsLQMcSfz31oFuPXo2rXD725gUOWM5wT/pub?output=csv
   sheets: {
-    profile:    'YOUR_PROFILE_METRICS_CSV_URL',
-    posts:      'YOUR_POST_METRICS_CSV_URL',
-    stories:    'YOUR_STORY_METRICS_CSV_URL',
-    reels:      'YOUR_REEL_METRICS_CSV_URL',
-    ads:        'YOUR_AD_METRICS_CSV_URL',
-    campaigns:  'YOUR_CAMPAIGN_METRICS_CSV_URL',
+    profile:    'https://docs.google.com/spreadsheets/d/e/2PACX-1vRbeTPHgv7YwyJuDuUmUqvNfU_XA3RJ-qwmUcDaUUMTv-brGsLQMcSfz31oFuPXo2rXD725gUOWM5wT/pub?gid=89648221&single=true&output=csv',
+    posts:      'https://docs.google.com/spreadsheets/d/e/2PACX-1vRbeTPHgv7YwyJuDuUmUqvNfU_XA3RJ-qwmUcDaUUMTv-brGsLQMcSfz31oFuPXo2rXD725gUOWM5wT/pub?gid=580996054&single=true&output=csv',
+    stories:    'https://docs.google.com/spreadsheets/d/e/2PACX-1vRbeTPHgv7YwyJuDuUmUqvNfU_XA3RJ-qwmUcDaUUMTv-brGsLQMcSfz31oFuPXo2rXD725gUOWM5wT/pub?gid=1014561652&single=true&output=csv',
+    reels:      'https://docs.google.com/spreadsheets/d/e/2PACX-1vRbeTPHgv7YwyJuDuUmUqvNfU_XA3RJ-qwmUcDaUUMTv-brGsLQMcSfz31oFuPXo2rXD725gUOWM5wT/pub?gid=1371023998&single=true&output=csv',
+    ads:        'https://docs.google.com/spreadsheets/d/e/2PACX-1vRbeTPHgv7YwyJuDuUmUqvNfU_XA3RJ-qwmUcDaUUMTv-brGsLQMcSfz31oFuPXo2rXD725gUOWM5wT/pub?gid=1682229645&single=true&output=csv',
+    campaigns:  'https://docs.google.com/spreadsheets/d/e/2PACX-1vRbeTPHgv7YwyJuDuUmUqvNfU_XA3RJ-qwmUcDaUUMTv-brGsLQMcSfz31oFuPXo2rXD725gUOWM5wT/pub?gid=820085904&single=true&output=csv',
   },
 
   // Dashboard settings
