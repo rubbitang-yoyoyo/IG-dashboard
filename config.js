@@ -136,7 +136,9 @@ async function loadAllData() {
 }
 
 async function fetchSheetData(url) {
-  const response = await fetch(url);
+  // Add cache-busting parameter to avoid stale data
+  const cacheBuster = '&_t=' + Date.now();
+  const response = await fetch(url + cacheBuster);
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   const text = await response.text();
   return parseCSV(text);
