@@ -435,6 +435,37 @@ td.caption-cell {
   background: rgba(255, 255, 255, 0.3);
 }
 
+/* ============ ADS PENDING NOTICE ============ */
+.ads-pending-notice {
+  background: var(--bg-card);
+  border: 1px dashed var(--border-light);
+  padding: 48px 32px;
+  text-align: center;
+  margin: 20px 30px;
+}
+
+.ads-pending-notice h3 {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.ads-pending-notice p {
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 14px;
+  margin: 8px 0;
+  line-height: 1.6;
+}
+
+.ads-pending-notice code {
+  background: var(--bg-hover);
+  color: var(--accent);
+  padding: 2px 6px;
+  font-size: 13px;
+}
+
 /* ============ RESPONSIVE ============ */
 
 /* Tablet and below (768px) */

@@ -5,11 +5,8 @@
 // ============ TAB NAVIGATION ============
 document.querySelectorAll('.tab').forEach(tab => {
   tab.addEventListener('click', () => {
-    // Update active tab button
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
-
-    // Show corresponding content
     document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
     const target = document.getElementById('tab-' + tab.dataset.tab);
     if (target) target.classList.add('active');
@@ -24,7 +21,7 @@ document.getElementById('dateRange').addEventListener('change', function() {
 
 
 // ============ KPI UPDATERS ============
-function updateOverviewKPIs(profile, posts, ads, days) {
+function updateOverviewKPIs(profile, posts, reels, days) {
   // Followers
   if (profile.length > 0) {
     const latest = parseInt(profile[profile.length - 1].Followers) || 0;
@@ -36,11 +33,10 @@ function updateOverviewKPIs(profile, posts, ads, days) {
     el.className = 'kpi-change ' + change.class;
   }
 
-  // Reach
+  // Total Reach
   if (profile.length > 0) {
     const totalReach = sumField(profile, 'Reach');
     document.getElementById('kpi-reach').textContent = formatNumber(totalReach);
-    // Compare halves
     const half = Math.floor(profile.length / 2);
     const firstHalf = sumField(profile.slice(0, half), 'Reach');
     const secondHalf = sumField(profile.slice(half), 'Reach');
@@ -50,15 +46,15 @@ function updateOverviewKPIs(profile, posts, ads, days) {
     el.className = 'kpi-change ' + change.class;
   }
 
-  // Impressions
+  // Profile Views
   if (profile.length > 0) {
-    const totalImpressions = sumField(profile, 'Impressions');
-    document.getElementById('kpi-impressions').textContent = formatNumber(totalImpressions);
+    const totalPV = sumField(profile, 'Profile Views');
+    document.getElementById('kpi-profile-views').textContent = formatNumber(totalPV);
     const half = Math.floor(profile.length / 2);
-    const firstHalf = sumField(profile.slice(0, half), 'Impressions');
-    const secondHalf = sumField(profile.slice(half), 'Impressions');
+    const firstHalf = sumField(profile.slice(0, half), 'Profile Views');
+    const secondHalf = sumField(profile.slice(half), 'Profile Views');
     const change = calcChange(secondHalf, firstHalf);
-    const el = document.getElementById('kpi-impressions-change');
+    const el = document.getElementById('kpi-profile-views-change');
     el.textContent = change.label;
     el.className = 'kpi-change ' + change.class;
   }
@@ -67,35 +63,74 @@ function updateOverviewKPIs(profile, posts, ads, days) {
   if (posts.length > 0) {
     const avgEng = avgField(posts, 'Engagement Rate');
     document.getElementById('kpi-engagement').textContent = avgEng.toFixed(2) + '%';
-  }
-
-  // Ad Spend
-  if (ads.length > 0) {
-    const totalSpend = sumField(ads, 'Spend');
-    document.getElementById('kpi-spend').textContent = formatCurrency(totalSpend);
-    const half = Math.floor(ads.length / 2);
-    const firstHalf = sumField(ads.slice(0, half), 'Spend');
-    const secondHalf = sumField(ads.slice(half), 'Spend');
+    // Compare first half vs second half of posts
+    const half = Math.floor(posts.length / 2);
+    const firstHalf = avgField(posts.slice(0, half), 'Engagement Rate');
+    const secondHalf = avgField(posts.slice(half), 'Engagement Rate');
     const change = calcChange(secondHalf, firstHalf);
-    const el = document.getElementById('kpi-spend-change');
+    const el = document.getElementById('kpi-engagement-change');
     el.textContent = change.label;
     el.className = 'kpi-change ' + change.class;
   }
 
-  // ROAS
-  if (ads.length > 0) {
-    const totalSpend = sumField(ads, 'Spend');
-    const totalClicks = sumField(ads, 'Clicks');
-    if (totalSpend > 0) {
-      const roas = (totalClicks / totalSpend).toFixed(2);
-      document.getElementById('kpi-roas').textContent = roas + 'x';
-    }
+  // Total Posts
+  if (posts.length > 0) {
+    document.getElementById('kpi-total-posts').textContent = posts.length;
   }
+
+  // Total Reels Plays
+  if (reels.length > 0) {
+    const totalPlays = sumField(reels, 'Plays');
+    document.getElementById('kpi-reel-plays').textContent = formatNumber(totalPlays);
+    const half = Math.floor(reels.length / 2);
+    const firstHalf = sumField(reels.slice(0, half), 'Plays');
+    const secondHalf = sumField(reels.slice(half), 'Plays');
+    const change = calcChange(secondHalf, firstHalf);
+    const el = document.getElementById('kpi-reel-plays-change');
+    el.textContent = change.label;
+    el.className = 'kpi-change ' + change.class;
+  }
+}
+
+
+function updateOrganicKPIs(posts, profile) {
+  if (posts.length > 0) {
+    document.getElementById('kpi-avg-likes').textContent =
+      formatNumber(Math.round(avgField(posts, 'Like Count')));
+    document.getElementById('kpi-avg-comments').textContent =
+      formatNumber(Math.round(avgField(posts, 'Comment Count')));
+    document.getElementById('kpi-avg-saves').textContent =
+      formatNumber(Math.round(avgField(posts, 'Saved')));
+  }
+
+  if (profile.length > 0) {
+    const totalClicks = sumField(profile, 'Website Clicks');
+    document.getElementById('kpi-website-clicks').textContent = formatNumber(totalClicks);
+  }
+}
+
+
+function updateContentKPIs(reels) {
+  if (reels.length === 0) return;
+
+  document.getElementById('kpi-total-reels').textContent = reels.length;
+  document.getElementById('kpi-total-reel-plays').textContent =
+    formatNumber(sumField(reels, 'Plays'));
+  document.getElementById('kpi-avg-reel-reach').textContent =
+    formatNumber(Math.round(avgField(reels, 'Reach')));
+  document.getElementById('kpi-avg-reel-interactions').textContent =
+    formatNumber(Math.round(avgField(reels, 'Total Interactions')));
 }
 
 
 function updateAdsKPIs(ads) {
   if (ads.length === 0) return;
+
+  // Show ads sections, hide pending notice
+  document.getElementById('ads-pending').style.display = 'none';
+  document.getElementById('ads-kpis').style.display = '';
+  document.getElementById('ads-charts').style.display = '';
+  document.getElementById('ads-table').style.display = '';
 
   document.getElementById('kpi-total-spend').textContent = formatCurrency(sumField(ads, 'Spend'));
   document.getElementById('kpi-avg-cpc').textContent = formatCurrency(avgField(ads, 'CPC'));
@@ -113,31 +148,36 @@ function renderDashboard(days) {
   const stories = filterByDays(DATA.stories, days);
   const reels = filterByDays(DATA.reels, days);
   const ads = filterByDays(DATA.ads, days);
-  const campaigns = DATA.campaigns; // Campaigns are aggregated, not daily
+  const campaigns = DATA.campaigns;
 
   // Overview
-  updateOverviewKPIs(profile, posts, ads, days);
+  updateOverviewKPIs(profile, posts, reels, days);
   renderFollowersChart(profile);
-  renderReachImpressionsChart(profile);
-  renderSpendResultsChart(ads);
+  renderReachChart(profile);
+  renderEngagementOverviewChart(posts);
 
   // Organic
+  updateOrganicKPIs(posts, profile);
   renderOrganicReachChart(profile);
   renderPostTypeChart(posts);
-  renderProfileViewsChart(profile);
+  renderEngagementBreakdownChart(posts);
   renderTopPostsTable(posts);
 
-  // Ads
-  updateAdsKPIs(ads);
-  renderDailySpendChart(ads);
-  renderCampaignSpendChart(campaigns);
-  renderCpcCtrChart(ads);
-  renderCampaignsTable(campaigns);
-
   // Content
+  updateContentKPIs(reels);
   renderReelsChart(reels);
+  renderReelsEngagementChart(reels);
   renderStoriesChart(stories);
   renderReelsTable(reels);
+
+  // Ads (only if data exists)
+  if (ads.length > 0) {
+    updateAdsKPIs(ads);
+    renderDailySpendChart(ads);
+    renderCampaignSpendChart(campaigns);
+    renderCpcCtrChart(ads);
+    renderCampaignsTable(campaigns);
+  }
 
   // Update timestamp
   document.getElementById('lastUpdated').textContent =
@@ -165,16 +205,15 @@ async function init() {
         renderDashboard(days);
       }, DASHBOARD_CONFIG.refreshInterval);
     }
-
   } catch (error) {
-    loadingEl.classList.add('hidden');
-    const banner = document.getElementById('error-banner');
-    document.getElementById('error-message').textContent =
-      'Failed to load data: ' + error.message;
-    banner.classList.remove('hidden');
-    console.error('Dashboard init error:', error);
+    console.error('Dashboard init failed:', error);
+    loadingEl.innerHTML = `
+      <p style="color: #e35353;">Failed to load dashboard data.</p>
+      <p style="color: #808080;">${error.message}</p>
+      <button onclick="location.reload()" style="margin-top: 16px; padding: 10px 24px;
+        background: #d1334e; color: white; border: none; cursor: pointer;">Retry</button>
+    `;
   }
 }
 
-// Start
 init();

@@ -1,5 +1,5 @@
 /* ============================================================
-   CHARTS.JS — Organic chart rendering
+   CHARTS.JS — Organic & Content chart rendering
    ============================================================ */
 
 // Store chart instances for cleanup
@@ -61,6 +61,18 @@ const defaultOptions = {
   }
 };
 
+const doughnutOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      position: 'bottom',
+      labels: { color: COLORS.text, padding: 16, font: { size: 12, family: 'Antonio, sans-serif' } }
+    },
+    tooltip: defaultOptions.plugins.tooltip,
+  }
+};
+
 
 // ============ OVERVIEW CHARTS ============
 
@@ -99,34 +111,30 @@ function renderFollowersChart(data) {
 }
 
 
-function renderReachImpressionsChart(data) {
-  destroyChart('chart-reach-impressions');
-  const ctx = document.getElementById('chart-reach-impressions');
+function renderReachChart(data) {
+  destroyChart('chart-reach');
+  const ctx = document.getElementById('chart-reach');
   if (!ctx || data.length === 0) return;
 
   ctx.parentElement.style.height = '300px';
 
-  chartInstances['chart-reach-impressions'] = new Chart(ctx, {
+  chartInstances['chart-reach'] = new Chart(ctx, {
     type: 'bar',
     data: {
       labels: data.map(r => r.Date).slice(-14),
-      datasets: [
-        {
-          label: 'Reach',
-          data: data.map(r => parseInt(r.Reach) || 0).slice(-14),
-          backgroundColor: COLORS.success,
-          borderRadius: 0,
-        },
-        {
-          label: 'Impressions',
-          data: data.map(r => parseInt(r.Impressions) || 0).slice(-14),
-          backgroundColor: COLORS.accent,
-          borderRadius: 0,
-        }
-      ]
+      datasets: [{
+        label: 'Reach',
+        data: data.map(r => parseInt(r.Reach) || 0).slice(-14),
+        backgroundColor: COLORS.success,
+        borderRadius: 0,
+      }]
     },
     options: {
       ...defaultOptions,
+      plugins: {
+        ...defaultOptions.plugins,
+        legend: { display: false }
+      },
       scales: {
         ...defaultOptions.scales,
         x: {
@@ -142,65 +150,61 @@ function renderReachImpressionsChart(data) {
 }
 
 
-function renderSpendResultsChart(adsData) {
-  destroyChart('chart-spend-results');
-  const ctx = document.getElementById('chart-spend-results');
-  if (!ctx || adsData.length === 0) return;
+function renderEngagementOverviewChart(posts) {
+  destroyChart('chart-engagement-overview');
+  const ctx = document.getElementById('chart-engagement-overview');
+  if (!ctx || posts.length === 0) return;
 
   ctx.parentElement.style.height = '300px';
 
-  // Aggregate by date
+  // Aggregate engagement by date
   const byDate = {};
-  adsData.forEach(row => {
-    const d = row.Date;
-    if (!byDate[d]) byDate[d] = { spend: 0, clicks: 0 };
-    byDate[d].spend += parseFloat(row.Spend) || 0;
-    byDate[d].clicks += parseInt(row.Clicks) || 0;
+  posts.forEach(post => {
+    const d = post.Date;
+    if (!byDate[d]) byDate[d] = { likes: 0, comments: 0, saves: 0 };
+    byDate[d].likes += parseInt(post['Like Count']) || 0;
+    byDate[d].comments += parseInt(post['Comment Count']) || 0;
+    byDate[d].saves += parseInt(post.Saved) || 0;
   });
 
   const dates = Object.keys(byDate).sort().slice(-14);
 
-  chartInstances['chart-spend-results'] = new Chart(ctx, {
-    type: 'line',
+  chartInstances['chart-engagement-overview'] = new Chart(ctx, {
+    type: 'bar',
     data: {
       labels: dates,
       datasets: [
         {
-          label: 'Spend ($)',
-          data: dates.map(d => byDate[d].spend.toFixed(2)),
-          borderColor: COLORS.accent,
-          backgroundColor: 'rgba(209, 51, 78, 0.1)',
-          fill: true,
-          tension: 0.3,
-          yAxisID: 'y',
-          borderWidth: 2,
-          pointRadius: 0,
+          label: 'Likes',
+          data: dates.map(d => byDate[d].likes),
+          backgroundColor: COLORS.accent,
+          borderRadius: 0,
         },
         {
-          label: 'Clicks',
-          data: dates.map(d => byDate[d].clicks),
-          borderColor: COLORS.success,
-          tension: 0.3,
-          yAxisID: 'y1',
-          borderWidth: 2,
-          pointRadius: 0,
+          label: 'Comments',
+          data: dates.map(d => byDate[d].comments),
+          backgroundColor: COLORS.success,
+          borderRadius: 0,
+        },
+        {
+          label: 'Saves',
+          data: dates.map(d => byDate[d].saves),
+          backgroundColor: COLORS.warning,
+          borderRadius: 0,
         }
       ]
     },
     options: {
       ...defaultOptions,
       scales: {
-        x: defaultOptions.scales.x,
+        ...defaultOptions.scales,
+        x: {
+          ...defaultOptions.scales.x,
+          stacked: true,
+        },
         y: {
           ...defaultOptions.scales.y,
-          position: 'left',
-          title: { display: true, text: 'Spend ($)', color: '#636b80' }
-        },
-        y1: {
-          ...defaultOptions.scales.y,
-          position: 'right',
-          title: { display: true, text: 'Clicks', color: '#636b80' },
-          grid: { drawOnChartArea: false }
+          stacked: true,
         }
       }
     }
@@ -233,8 +237,8 @@ function renderOrganicReachChart(data) {
           pointRadius: 0,
         },
         {
-          label: 'Impressions',
-          data: data.map(r => parseInt(r.Impressions) || 0),
+          label: 'Profile Views',
+          data: data.map(r => parseInt(r['Profile Views']) || 0),
           borderColor: COLORS.accent,
           backgroundColor: 'rgba(209, 51, 78, 0.05)',
           fill: true,
@@ -271,7 +275,7 @@ function renderPostTypeChart(posts) {
   chartInstances['chart-post-type'] = new Chart(ctx, {
     type: 'doughnut',
     data: {
-      labels: labels,
+      labels: labels.map(l => `${l} (${byType[l].count})`),
       datasets: [{
         data: labels.map(l => Math.round(byType[l].engagement / byType[l].count)),
         backgroundColor: colors.slice(0, labels.length),
@@ -279,47 +283,34 @@ function renderPostTypeChart(posts) {
         borderWidth: 4,
       }]
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          position: 'bottom',
-          labels: { color: '#9ca3b4', padding: 16, font: { size: 12 } }
-        },
-        tooltip: defaultOptions.plugins.tooltip,
-      }
-    }
+    options: doughnutOptions,
   });
 }
 
 
-function renderProfileViewsChart(data) {
-  destroyChart('chart-profile-views');
-  const ctx = document.getElementById('chart-profile-views');
-  if (!ctx || data.length === 0) return;
+function renderEngagementBreakdownChart(posts) {
+  destroyChart('chart-engagement-breakdown');
+  const ctx = document.getElementById('chart-engagement-breakdown');
+  if (!ctx || posts.length === 0) return;
 
   ctx.parentElement.style.height = '300px';
 
-  chartInstances['chart-profile-views'] = new Chart(ctx, {
-    type: 'bar',
+  const totalLikes = sumField(posts, 'Like Count');
+  const totalComments = sumField(posts, 'Comment Count');
+  const totalSaves = sumField(posts, 'Saved');
+
+  chartInstances['chart-engagement-breakdown'] = new Chart(ctx, {
+    type: 'doughnut',
     data: {
-      labels: data.map(r => r.Date).slice(-14),
+      labels: ['Likes', 'Comments', 'Saves'],
       datasets: [{
-        label: 'Profile Views',
-        data: data.map(r => parseInt(r['Profile Views']) || 0).slice(-14),
-        backgroundColor: COLORS.accent,
-        borderRadius: 0,
-        borderSkipped: false,
+        data: [totalLikes, totalComments, totalSaves],
+        backgroundColor: [COLORS.accent, COLORS.success, COLORS.warning],
+        borderColor: '#1a1a1a',
+        borderWidth: 4,
       }]
     },
-    options: {
-      ...defaultOptions,
-      plugins: {
-        ...defaultOptions.plugins,
-        legend: { display: false }
-      }
-    }
+    options: doughnutOptions,
   });
 }
 
@@ -338,7 +329,10 @@ function renderReelsChart(reels) {
   chartInstances['chart-reels'] = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: sorted.map((_, i) => `Reel ${i + 1}`),
+      labels: sorted.map((r, i) => {
+        const caption = r.Caption || '';
+        return caption.substring(0, 20) + (caption.length > 20 ? '...' : '') || `Reel ${i + 1}`;
+      }),
       datasets: [
         {
           label: 'Plays',
@@ -354,7 +348,38 @@ function renderReelsChart(reels) {
         }
       ]
     },
-    options: defaultOptions,
+    options: {
+      ...defaultOptions,
+      indexAxis: 'y',
+    },
+  });
+}
+
+
+function renderReelsEngagementChart(reels) {
+  destroyChart('chart-reels-engagement');
+  const ctx = document.getElementById('chart-reels-engagement');
+  if (!ctx || reels.length === 0) return;
+
+  ctx.parentElement.style.height = '300px';
+
+  const totalLikes = sumField(reels, 'Like Count');
+  const totalComments = sumField(reels, 'Comment Count');
+  const totalSaves = sumField(reels, 'Saved');
+  const totalShares = sumField(reels, 'Shares');
+
+  chartInstances['chart-reels-engagement'] = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Likes', 'Comments', 'Saves', 'Shares'],
+      datasets: [{
+        data: [totalLikes, totalComments, totalSaves, totalShares],
+        backgroundColor: [COLORS.accent, COLORS.success, COLORS.warning, COLORS.white],
+        borderColor: '#1a1a1a',
+        borderWidth: 4,
+      }]
+    },
+    options: doughnutOptions,
   });
 }
 
@@ -362,7 +387,19 @@ function renderReelsChart(reels) {
 function renderStoriesChart(stories) {
   destroyChart('chart-stories');
   const ctx = document.getElementById('chart-stories');
-  if (!ctx || stories.length === 0) return;
+  if (!ctx || stories.length === 0) {
+    // Show no data message
+    if (ctx) {
+      const parent = ctx.parentElement;
+      parent.innerHTML = `
+        <h3 class="chart-title">Stories Performance</h3>
+        <div style="display:flex;align-items:center;justify-content:center;height:250px;color:#808080;">
+          No active stories. Stories data appears when you have active stories (last 24h).
+        </div>
+      `;
+    }
+    return;
+  }
 
   ctx.parentElement.style.height = '300px';
 
@@ -374,15 +411,21 @@ function renderStoriesChart(stories) {
       labels: recent.map(r => r.Date),
       datasets: [
         {
-          label: 'Impressions',
-          data: recent.map(r => parseInt(r.Impressions) || 0),
-          backgroundColor: COLORS.white,
+          label: 'Reach',
+          data: recent.map(r => parseInt(r.Reach) || 0),
+          backgroundColor: COLORS.success,
+          borderRadius: 0,
+        },
+        {
+          label: 'Replies',
+          data: recent.map(r => parseInt(r.Replies) || 0),
+          backgroundColor: COLORS.accent,
           borderRadius: 0,
         },
         {
           label: 'Exits',
           data: recent.map(r => parseInt(r.Exits) || 0),
-          backgroundColor: COLORS.accentLight,
+          backgroundColor: COLORS.muted,
           borderRadius: 0,
         }
       ]
@@ -413,7 +456,6 @@ function renderTopPostsTable(posts) {
       <td>${formatNumber(parseInt(post['Like Count']) || 0)}</td>
       <td>${formatNumber(parseInt(post['Comment Count']) || 0)}</td>
       <td>${formatNumber(parseInt(post.Saved) || 0)}</td>
-      <td>${formatNumber(parseInt(post.Shares) || 0)}</td>
       <td>${formatNumber(parseInt(post.Reach) || 0)}</td>
       <td>${post['Engagement Rate'] || '0'}%</td>
     </tr>
@@ -439,6 +481,7 @@ function renderReelsTable(reels) {
       <td>${formatNumber(parseInt(reel['Comment Count']) || 0)}</td>
       <td>${formatNumber(parseInt(reel.Saved) || 0)}</td>
       <td>${formatNumber(parseInt(reel.Shares) || 0)}</td>
+      <td>${formatNumber(parseInt(reel['Total Interactions']) || 0)}</td>
     </tr>
   `).join('');
 }

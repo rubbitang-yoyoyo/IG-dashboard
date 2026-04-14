@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>Layture — Instagram & Ads Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,8 +38,8 @@
   <nav class="tabs">
     <button class="tab active" data-tab="overview">Overview</button>
     <button class="tab" data-tab="organic">Organic</button>
-    <button class="tab" data-tab="ads">Ads</button>
     <button class="tab" data-tab="content">Content</button>
+    <button class="tab" data-tab="ads">Ads</button>
   </nav>
 
   <!-- Overview Tab -->
@@ -49,29 +52,29 @@
         <div class="kpi-change" id="kpi-followers-change"></div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label">Reach</div>
+        <div class="kpi-label">Total Reach</div>
         <div class="kpi-value" id="kpi-reach">--</div>
         <div class="kpi-change" id="kpi-reach-change"></div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label">Impressions</div>
-        <div class="kpi-value" id="kpi-impressions">--</div>
-        <div class="kpi-change" id="kpi-impressions-change"></div>
+        <div class="kpi-label">Profile Views</div>
+        <div class="kpi-value" id="kpi-profile-views">--</div>
+        <div class="kpi-change" id="kpi-profile-views-change"></div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label">Engagement Rate</div>
+        <div class="kpi-label">Avg Engagement Rate</div>
         <div class="kpi-value" id="kpi-engagement">--</div>
         <div class="kpi-change" id="kpi-engagement-change"></div>
       </div>
-      <div class="kpi-card accent">
-        <div class="kpi-label">Ad Spend</div>
-        <div class="kpi-value" id="kpi-spend">--</div>
-        <div class="kpi-change" id="kpi-spend-change"></div>
+      <div class="kpi-card">
+        <div class="kpi-label">Total Posts</div>
+        <div class="kpi-value" id="kpi-total-posts">--</div>
+        <div class="kpi-change" id="kpi-total-posts-change"></div>
       </div>
       <div class="kpi-card accent">
-        <div class="kpi-label">ROAS</div>
-        <div class="kpi-value" id="kpi-roas">--</div>
-        <div class="kpi-change" id="kpi-roas-change"></div>
+        <div class="kpi-label">Total Reels Plays</div>
+        <div class="kpi-value" id="kpi-reel-plays">--</div>
+        <div class="kpi-change" id="kpi-reel-plays-change"></div>
       </div>
     </section>
 
@@ -82,21 +85,40 @@
         <canvas id="chart-followers"></canvas>
       </div>
       <div class="chart-card">
-        <h3 class="chart-title">Reach vs Impressions</h3>
-        <canvas id="chart-reach-impressions"></canvas>
+        <h3 class="chart-title">Daily Reach</h3>
+        <canvas id="chart-reach"></canvas>
       </div>
       <div class="chart-card">
-        <h3 class="chart-title">Spend vs Results</h3>
-        <canvas id="chart-spend-results"></canvas>
+        <h3 class="chart-title">Engagement Overview</h3>
+        <canvas id="chart-engagement-overview"></canvas>
       </div>
     </section>
   </main>
 
   <!-- Organic Tab -->
   <main id="tab-organic" class="tab-content">
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Avg Likes / Post</div>
+        <div class="kpi-value" id="kpi-avg-likes">--</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Avg Comments / Post</div>
+        <div class="kpi-value" id="kpi-avg-comments">--</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Avg Saves / Post</div>
+        <div class="kpi-value" id="kpi-avg-saves">--</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Website Clicks</div>
+        <div class="kpi-value" id="kpi-website-clicks">--</div>
+      </div>
+    </section>
+
     <section class="chart-grid">
       <div class="chart-card wide">
-        <h3 class="chart-title">Daily Reach & Impressions</h3>
+        <h3 class="chart-title">Daily Reach & Profile Views</h3>
         <canvas id="chart-organic-reach"></canvas>
       </div>
       <div class="chart-card">
@@ -104,8 +126,8 @@
         <canvas id="chart-post-type"></canvas>
       </div>
       <div class="chart-card">
-        <h3 class="chart-title">Profile Views</h3>
-        <canvas id="chart-profile-views"></canvas>
+        <h3 class="chart-title">Likes vs Comments vs Saves</h3>
+        <canvas id="chart-engagement-breakdown"></canvas>
       </div>
     </section>
 
@@ -118,7 +140,61 @@
             <tr>
               <th>Date</th><th>Type</th><th>Caption</th>
               <th>Likes</th><th>Comments</th><th>Saves</th>
-              <th>Shares</th><th>Reach</th><th>Eng. Rate</th>
+              <th>Reach</th><th>Eng. Rate</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- Content Tab -->
+  <main id="tab-content" class="tab-content">
+    <section class="kpi-grid">
+      <div class="kpi-card accent">
+        <div class="kpi-label">Total Reels</div>
+        <div class="kpi-value" id="kpi-total-reels">--</div>
+      </div>
+      <div class="kpi-card accent">
+        <div class="kpi-label">Total Reel Plays</div>
+        <div class="kpi-value" id="kpi-total-reel-plays">--</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Avg Reel Reach</div>
+        <div class="kpi-value" id="kpi-avg-reel-reach">--</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Avg Reel Interactions</div>
+        <div class="kpi-value" id="kpi-avg-reel-interactions">--</div>
+      </div>
+    </section>
+
+    <section class="chart-grid">
+      <div class="chart-card wide">
+        <h3 class="chart-title">Top Reels by Plays</h3>
+        <canvas id="chart-reels"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3 class="chart-title">Reels Engagement Breakdown</h3>
+        <canvas id="chart-reels-engagement"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3 class="chart-title">Stories Performance</h3>
+        <canvas id="chart-stories"></canvas>
+      </div>
+    </section>
+
+    <!-- Reels Table -->
+    <section class="table-card">
+      <h3 class="chart-title">Recent Reels</h3>
+      <div class="table-wrapper">
+        <table id="table-reels">
+          <thead>
+            <tr>
+              <th>Date</th><th>Caption</th><th>Plays</th>
+              <th>Reach</th><th>Likes</th><th>Comments</th>
+              <th>Saves</th><th>Shares</th><th>Interactions</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -129,7 +205,13 @@
 
   <!-- Ads Tab -->
   <main id="tab-ads" class="tab-content">
-    <section class="kpi-grid">
+    <div id="ads-pending" class="ads-pending-notice">
+      <h3>Ads Data Coming Soon</h3>
+      <p>Ads data will appear here once <code>ads_read</code> permission is approved by Meta (within 24 hours).</p>
+      <p>Once approved, generate a new access token with <code>ads_read</code> permission and update your Apps Script.</p>
+    </div>
+
+    <section class="kpi-grid" id="ads-kpis" style="display:none;">
       <div class="kpi-card accent">
         <div class="kpi-label">Total Spend</div>
         <div class="kpi-value" id="kpi-total-spend">--</div>
@@ -148,7 +230,7 @@
       </div>
     </section>
 
-    <section class="chart-grid">
+    <section class="chart-grid" id="ads-charts" style="display:none;">
       <div class="chart-card wide">
         <h3 class="chart-title">Daily Ad Spend</h3>
         <canvas id="chart-daily-spend"></canvas>
@@ -164,7 +246,7 @@
     </section>
 
     <!-- Campaign Table -->
-    <section class="table-card">
+    <section class="table-card" id="ads-table" style="display:none;">
       <h3 class="chart-title">Campaign Performance</h3>
       <div class="table-wrapper">
         <table id="table-campaigns">
@@ -173,37 +255,6 @@
               <th>Campaign</th><th>Status</th><th>Impressions</th>
               <th>Reach</th><th>Clicks</th><th>Spend</th>
               <th>CPC</th><th>CPM</th><th>CTR</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </section>
-  </main>
-
-  <!-- Content Tab -->
-  <main id="tab-content" class="tab-content">
-    <section class="chart-grid">
-      <div class="chart-card">
-        <h3 class="chart-title">Reels Performance</h3>
-        <canvas id="chart-reels"></canvas>
-      </div>
-      <div class="chart-card">
-        <h3 class="chart-title">Stories Performance</h3>
-        <canvas id="chart-stories"></canvas>
-      </div>
-    </section>
-
-    <!-- Reels Table -->
-    <section class="table-card">
-      <h3 class="chart-title">Recent Reels</h3>
-      <div class="table-wrapper">
-        <table id="table-reels">
-          <thead>
-            <tr>
-              <th>Date</th><th>Caption</th><th>Plays</th>
-              <th>Reach</th><th>Likes</th><th>Comments</th>
-              <th>Saves</th><th>Shares</th>
             </tr>
           </thead>
           <tbody></tbody>
