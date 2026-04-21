@@ -1,6 +1,8 @@
 /* ============================================================
-   APP.JS — Main initialization & tab management
+   APP.JS — Dashboard Controller
+   Layture Instagram Analytics Dashboard
    ============================================================ */
+
 
 // ============ TAB NAVIGATION ============
 document.querySelectorAll('.tab').forEach(tab => {
@@ -20,128 +22,159 @@ document.getElementById('dateRange').addEventListener('change', function() {
 });
 
 
-// ============ KPI UPDATERS ============
-function updateOverviewKPIs(profile, posts, reels, days) {
+// ============ OVERVIEW TAB KPIs ============
+function updateCampaignKPIs(profile, posts, reels, ads) {
   // Followers
   if (profile.length > 0) {
     const latest = parseInt(profile[profile.length - 1].Followers) || 0;
     const earliest = parseInt(profile[0].Followers) || 0;
-    document.getElementById('kpi-followers').textContent = formatNumber(latest);
-    const change = calcChange(latest, earliest);
-    const el = document.getElementById('kpi-followers-change');
-    el.textContent = change.label;
-    el.className = 'kpi-change ' + change.class;
+    setText('kpi-followers', formatNumber(latest));
+    setChange('kpi-followers-change', calcChange(latest, earliest));
   }
 
   // Total Reach
   if (profile.length > 0) {
     const totalReach = sumField(profile, 'Reach');
-    document.getElementById('kpi-reach').textContent = formatNumber(totalReach);
-    const half = Math.floor(profile.length / 2);
-    const firstHalf = sumField(profile.slice(0, half), 'Reach');
-    const secondHalf = sumField(profile.slice(half), 'Reach');
-    const change = calcChange(secondHalf, firstHalf);
-    const el = document.getElementById('kpi-reach-change');
-    el.textContent = change.label;
-    el.className = 'kpi-change ' + change.class;
+    setText('kpi-reach', formatNumber(totalReach));
+    setHalfChange('kpi-reach-change', profile, 'Reach');
   }
 
   // Profile Views
   if (profile.length > 0) {
     const totalPV = sumField(profile, 'Profile Views');
-    document.getElementById('kpi-profile-views').textContent = formatNumber(totalPV);
-    const half = Math.floor(profile.length / 2);
-    const firstHalf = sumField(profile.slice(0, half), 'Profile Views');
-    const secondHalf = sumField(profile.slice(half), 'Profile Views');
-    const change = calcChange(secondHalf, firstHalf);
-    const el = document.getElementById('kpi-profile-views-change');
-    el.textContent = change.label;
-    el.className = 'kpi-change ' + change.class;
+    setText('kpi-profile-views', formatNumber(totalPV));
+    setHalfChange('kpi-profile-views-change', profile, 'Profile Views');
+  }
+
+  // Website Clicks
+  if (profile.length > 0) {
+    const totalClicks = sumField(profile, 'Website Clicks');
+    setText('kpi-website-clicks', formatNumber(totalClicks));
+    setHalfChange('kpi-website-clicks-change', profile, 'Website Clicks');
   }
 
   // Engagement Rate
   if (posts.length > 0) {
     const avgEng = avgField(posts, 'Engagement Rate');
-    document.getElementById('kpi-engagement').textContent = avgEng.toFixed(2) + '%';
-    // Compare first half vs second half of posts
-    const half = Math.floor(posts.length / 2);
-    const firstHalf = avgField(posts.slice(0, half), 'Engagement Rate');
-    const secondHalf = avgField(posts.slice(half), 'Engagement Rate');
-    const change = calcChange(secondHalf, firstHalf);
-    const el = document.getElementById('kpi-engagement-change');
-    el.textContent = change.label;
-    el.className = 'kpi-change ' + change.class;
+    setText('kpi-engagement', avgEng.toFixed(2) + '%');
+    setHalfChange('kpi-engagement-change', posts, 'Engagement Rate');
   }
 
-  // Total Posts
-  if (posts.length > 0) {
-    document.getElementById('kpi-total-posts').textContent = posts.length;
-  }
-
-  // Total Reels Plays
+  // Reel Plays
   if (reels.length > 0) {
     const totalPlays = sumField(reels, 'Plays');
-    document.getElementById('kpi-reel-plays').textContent = formatNumber(totalPlays);
-    const half = Math.floor(reels.length / 2);
-    const firstHalf = sumField(reels.slice(0, half), 'Plays');
-    const secondHalf = sumField(reels.slice(half), 'Plays');
-    const change = calcChange(secondHalf, firstHalf);
-    const el = document.getElementById('kpi-reel-plays-change');
-    el.textContent = change.label;
-    el.className = 'kpi-change ' + change.class;
-  }
-}
-
-
-function updateOrganicKPIs(posts, profile) {
-  if (posts.length > 0) {
-    document.getElementById('kpi-avg-likes').textContent =
-      formatNumber(Math.round(avgField(posts, 'Like Count')));
-    document.getElementById('kpi-avg-comments').textContent =
-      formatNumber(Math.round(avgField(posts, 'Comment Count')));
-    document.getElementById('kpi-avg-saves').textContent =
-      formatNumber(Math.round(avgField(posts, 'Saved')));
+    setText('kpi-reel-plays', formatNumber(totalPlays));
+    setHalfChange('kpi-reel-plays-change', reels, 'Plays');
   }
 
+  // Funnel
   if (profile.length > 0) {
+    const totalPV = sumField(profile, 'Profile Views');
     const totalClicks = sumField(profile, 'Website Clicks');
-    document.getElementById('kpi-website-clicks').textContent = formatNumber(totalClicks);
+    document.getElementById('funnel-profile-views').textContent = formatNumber(totalPV);
+    document.getElementById('funnel-website-clicks').textContent = formatNumber(totalClicks);
+
+    // Adjust funnel bar widths proportionally
+    if (totalPV > 0) {
+      const clickPct = Math.max((totalClicks / totalPV) * 100, 10);
+      const funnelBars = document.querySelectorAll('.funnel-bar');
+      if (funnelBars.length >= 2) {
+        funnelBars[1].style.width = clickPct + '%';
+      }
+    }
   }
 }
 
 
-function updateContentKPIs(reels) {
-  if (reels.length === 0) return;
+// ============ ORGANIC TAB KPIs ============
+function updateOrganicKPIs(posts, reels) {
+  if (posts.length > 0) {
+    setText('kpi-total-posts', posts.length);
+    setText('kpi-avg-likes', formatNumber(Math.round(avgField(posts, 'Like Count'))));
+    setText('kpi-avg-comments', formatNumber(Math.round(avgField(posts, 'Comment Count'))));
+    setText('kpi-avg-saves', formatNumber(Math.round(avgField(posts, 'Saved'))));
+  }
 
-  document.getElementById('kpi-total-reels').textContent = reels.length;
-  document.getElementById('kpi-total-reel-plays').textContent =
-    formatNumber(sumField(reels, 'Plays'));
-  document.getElementById('kpi-avg-reel-reach').textContent =
-    formatNumber(Math.round(avgField(reels, 'Reach')));
-  document.getElementById('kpi-avg-reel-interactions').textContent =
-    formatNumber(Math.round(avgField(reels, 'Total Interactions')));
+  if (reels.length > 0) {
+    setText('kpi-total-reels', reels.length);
+    setText('kpi-total-reel-plays', formatNumber(sumField(reels, 'Plays')));
+  }
 }
 
 
-function updateAdsKPIs(ads) {
+// ============ ADS TAB KPIs ============
+function updateAdsKPIs(ads, campaigns) {
   if (ads.length === 0) return;
 
   // Show ads sections, hide pending notice
-  document.getElementById('ads-pending').style.display = 'none';
-  document.getElementById('ads-kpis').style.display = '';
-  document.getElementById('ads-charts').style.display = '';
-  document.getElementById('ads-table').style.display = '';
+  hide('ads-pending');
+  show('ads-kpis');
+  show('ads-charts');
+  show('ads-table');
 
-  document.getElementById('kpi-total-spend').textContent = formatCurrency(sumField(ads, 'Spend'));
-  document.getElementById('kpi-avg-cpc').textContent = formatCurrency(avgField(ads, 'CPC'));
-  document.getElementById('kpi-avg-cpm').textContent = formatCurrency(avgField(ads, 'CPM'));
-  document.getElementById('kpi-avg-ctr').textContent = formatPercent(avgField(ads, 'CTR'));
+  const totalSpend = sumField(ads, 'Spend');
+  const totalClicks = sumField(ads, 'Clicks');
+  const totalImpressions = sumField(ads, 'Impressions');
+  const avgCtr = avgField(ads, 'CTR');
+  const avgCpc = avgField(ads, 'CPC');
+  const avgCpm = avgField(ads, 'CPM');
+
+  setText('kpi-total-spend', formatCurrency(totalSpend));
+  setText('kpi-avg-ctr', formatPercent(avgCtr));
+  setText('kpi-avg-cpc', formatCurrency(avgCpc));
+  setText('kpi-avg-cpm', formatCurrency(avgCpm));
+  setText('kpi-total-clicks', formatNumber(totalClicks));
+  setText('kpi-total-impressions', formatNumber(totalImpressions));
+
+  // Budget remaining
+  const el = document.getElementById('kpi-budget-remaining');
+  if (el) el.textContent = '';
+}
+
+
+// ============ AUDIENCE A/B TEST KPIs ============
+function updateABTestKPIs(ads) {
+  if (ads.length === 0) return;
+
+  hide('ab-pending');
+  show('ab-kpis');
+  show('ab-charts');
+  show('ab-table');
+
+  // Group by ad set name (audience) and campaign name (creative)
+  const byAudience = groupBy(ads, 'Ad Set Name');
+  const byCreative = groupBy(ads, 'Campaign Name');
+
+  // Find best audience by CTR
+  let bestAudience = '', bestAudienceCtr = 0;
+  for (const [name, rows] of Object.entries(byAudience)) {
+    const ctr = avgField(rows, 'CTR');
+    if (ctr > bestAudienceCtr) {
+      bestAudienceCtr = ctr;
+      bestAudience = name;
+    }
+  }
+
+  // Find best creative by CPC (lowest)
+  let bestCreative = '', bestCreativeCpc = Infinity;
+  for (const [name, rows] of Object.entries(byCreative)) {
+    const cpc = avgField(rows, 'CPC');
+    if (cpc < bestCreativeCpc && cpc > 0) {
+      bestCreativeCpc = cpc;
+      bestCreative = name;
+    }
+  }
+
+  setText('kpi-best-audience', bestAudience || '--');
+  setText('kpi-best-creative', bestCreative || '--');
+  setText('kpi-lowest-cpc', bestCreativeCpc < Infinity ? formatCurrency(bestCreativeCpc) : '--');
+  setText('kpi-highest-ctr', bestAudienceCtr > 0 ? formatPercent(bestAudienceCtr) : '--');
 }
 
 
 // ============ MAIN RENDER ============
 function renderDashboard(days) {
-  days = days || 30;
+  days = days || 14;
 
   const profile = filterByDays(DATA.profile, days);
   const posts = filterByDays(DATA.posts, days);
@@ -151,37 +184,95 @@ function renderDashboard(days) {
   const campaigns = DATA.campaigns;
 
   // Overview
-  updateOverviewKPIs(profile, posts, reels, days);
+  updateCampaignKPIs(profile, posts, reels, ads);
   renderFollowersChart(profile);
   renderReachChart(profile);
   renderEngagementOverviewChart(posts);
 
-  // Organic
-  updateOrganicKPIs(posts, profile);
+  // Organic & Content
+  updateOrganicKPIs(posts, reels);
   renderOrganicReachChart(profile);
   renderPostTypeChart(posts);
   renderEngagementBreakdownChart(posts);
-  renderTopPostsTable(posts);
-
-  // Content
-  updateContentKPIs(reels);
   renderReelsChart(reels);
   renderReelsEngagementChart(reels);
   renderStoriesChart(stories);
+  renderTopPostsTable(posts);
   renderReelsTable(reels);
 
-  // Ads (only if data exists)
+  // Ads
   if (ads.length > 0) {
-    updateAdsKPIs(ads);
+    updateAdsKPIs(ads, campaigns);
     renderDailySpendChart(ads);
     renderCampaignSpendChart(campaigns);
     renderCpcCtrChart(ads);
     renderCampaignsTable(campaigns);
+
+    // A/B Test
+    updateABTestKPIs(ads);
+    renderAudienceCtrChart(ads);
+    renderCreativeCpcChart(ads);
+    renderAdGroupPerformanceChart(ads);
+    renderAdGroupsTable(ads);
   }
 
   // Update timestamp
   document.getElementById('lastUpdated').textContent =
     'Updated: ' + new Date().toLocaleString();
+}
+
+
+// ============ HELPER FUNCTIONS ============
+
+function setText(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = value;
+}
+
+function setChange(id, change) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.textContent = change.label;
+    el.className = 'kpi-change ' + change.class;
+  }
+}
+
+function setHalfChange(id, data, field) {
+  const half = Math.floor(data.length / 2);
+  if (half === 0) return;
+  const firstHalf = sumField(data.slice(0, half), field);
+  const secondHalf = sumField(data.slice(half), field);
+  setChange(id, calcChange(secondHalf, firstHalf));
+}
+
+function show(id) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = '';
+}
+
+function hide(id) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = 'none';
+}
+
+function groupBy(data, field) {
+  const groups = {};
+  data.forEach(row => {
+    const key = row[field] || 'Other';
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(row);
+  });
+  return groups;
+}
+
+function colorBenchmark(id, value, threshold, higherIsBetter) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (higherIsBetter) {
+    el.style.color = value >= threshold ? '#00d2a0' : '#e35353';
+  } else {
+    el.style.color = value <= threshold ? '#00d2a0' : '#e35353';
+  }
 }
 
 
@@ -191,9 +282,8 @@ async function init() {
 
   try {
     await loadAllData();
-    renderDashboard(30);
+    renderDashboard(14);
 
-    // Hide loading
     loadingEl.classList.add('hidden');
     setTimeout(() => loadingEl.remove(), 500);
 

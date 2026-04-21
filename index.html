@@ -25,10 +25,10 @@
     <div class="header-right">
       <select id="dateRange" class="select-control">
         <option value="7">Last 7 Days</option>
-        <option value="14">Last 14 Days</option>
-        <option value="30" selected>Last 30 Days</option>
+        <option value="14" selected>Last 14 Days</option>
+        <option value="30">Last 30 Days</option>
         <option value="60">Last 60 Days</option>
-        <option value="90">Last 90 Days</option>
+        <option value="90">All Time</option>
       </select>
       <span id="lastUpdated" class="last-updated">Updated: --</span>
     </div>
@@ -36,14 +36,16 @@
 
   <!-- Navigation Tabs -->
   <nav class="tabs">
-    <button class="tab active" data-tab="overview">Overview</button>
-    <button class="tab" data-tab="organic">Organic</button>
-    <button class="tab" data-tab="content">Content</button>
-    <button class="tab" data-tab="ads">Ads</button>
+    <button class="tab active" data-tab="campaign">Overview</button>
+    <button class="tab" data-tab="organic">Organic & Content</button>
+    <button class="tab" data-tab="ads">Ads Performance</button>
+    <button class="tab" data-tab="audience">Audience A/B Test</button>
   </nav>
 
-  <!-- Overview Tab -->
-  <main id="tab-overview" class="tab-content active">
+  <!-- ═══════════════════════════════════════════════════════════
+       TAB 1: CAMPAIGN OVERVIEW
+  ═══════════════════════════════════════════════════════════ -->
+  <main id="tab-campaign" class="tab-content active">
     <!-- KPI Cards -->
     <section class="kpi-grid">
       <div class="kpi-card">
@@ -62,23 +64,23 @@
         <div class="kpi-change" id="kpi-profile-views-change"></div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label">Avg Engagement Rate</div>
+        <div class="kpi-label">Website Clicks</div>
+        <div class="kpi-value" id="kpi-website-clicks">--</div>
+        <div class="kpi-change" id="kpi-website-clicks-change"></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Engagement Rate</div>
         <div class="kpi-value" id="kpi-engagement">--</div>
         <div class="kpi-change" id="kpi-engagement-change"></div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Total Posts</div>
-        <div class="kpi-value" id="kpi-total-posts">--</div>
-        <div class="kpi-change" id="kpi-total-posts-change"></div>
-      </div>
       <div class="kpi-card accent">
-        <div class="kpi-label">Total Reels Plays</div>
+        <div class="kpi-label">Reel Plays</div>
         <div class="kpi-value" id="kpi-reel-plays">--</div>
         <div class="kpi-change" id="kpi-reel-plays-change"></div>
       </div>
     </section>
 
-    <!-- Charts Row -->
+    <!-- Charts -->
     <section class="chart-grid">
       <div class="chart-card wide">
         <h3 class="chart-title">Followers Growth</h3>
@@ -89,15 +91,60 @@
         <canvas id="chart-reach"></canvas>
       </div>
       <div class="chart-card">
-        <h3 class="chart-title">Engagement Overview</h3>
+        <h3 class="chart-title">Engagement Breakdown (Likes / Comments / Saves)</h3>
         <canvas id="chart-engagement-overview"></canvas>
+      </div>
+    </section>
+
+    <!-- Funnel (placeholder until Pixel data is available) -->
+    <section class="chart-grid">
+      <div class="chart-card wide">
+        <h3 class="chart-title">Conversion Funnel</h3>
+        <div class="funnel-container" id="funnel-container">
+          <div class="funnel-step">
+            <div class="funnel-bar" style="width:100%">
+              <span class="funnel-label">Profile Views</span>
+              <span class="funnel-value" id="funnel-profile-views">--</span>
+            </div>
+          </div>
+          <div class="funnel-step">
+            <div class="funnel-bar" style="width:75%">
+              <span class="funnel-label">Website Clicks</span>
+              <span class="funnel-value" id="funnel-website-clicks">--</span>
+            </div>
+          </div>
+          <div class="funnel-step">
+            <div class="funnel-bar funnel-pending" style="width:50%">
+              <span class="funnel-label">Add to Cart</span>
+              <span class="funnel-value">Needs Pixel</span>
+            </div>
+          </div>
+          <div class="funnel-step">
+            <div class="funnel-bar funnel-pending" style="width:25%">
+              <span class="funnel-label">Purchase</span>
+              <span class="funnel-value">Needs Pixel</span>
+            </div>
+          </div>
+        </div>
+        <p class="funnel-note">Full funnel tracking requires Meta Pixel installation on layture.com. Currently showing Instagram data only.</p>
       </div>
     </section>
   </main>
 
-  <!-- Organic Tab -->
+  <!-- ═══════════════════════════════════════════════════════════
+       TAB 2: ORGANIC & CONTENT
+  ═══════════════════════════════════════════════════════════ -->
   <main id="tab-organic" class="tab-content">
+    <!-- Content KPIs -->
     <section class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Total Posts</div>
+        <div class="kpi-value" id="kpi-total-posts">--</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Total Reels</div>
+        <div class="kpi-value" id="kpi-total-reels">--</div>
+      </div>
       <div class="kpi-card">
         <div class="kpi-label">Avg Likes / Post</div>
         <div class="kpi-value" id="kpi-avg-likes">--</div>
@@ -110,12 +157,13 @@
         <div class="kpi-label">Avg Saves / Post</div>
         <div class="kpi-value" id="kpi-avg-saves">--</div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Website Clicks</div>
-        <div class="kpi-value" id="kpi-website-clicks">--</div>
+      <div class="kpi-card accent">
+        <div class="kpi-label">Total Reel Plays</div>
+        <div class="kpi-value" id="kpi-total-reel-plays">--</div>
       </div>
     </section>
 
+    <!-- Content Charts -->
     <section class="chart-grid">
       <div class="chart-card wide">
         <h3 class="chart-title">Daily Reach & Profile Views</h3>
@@ -128,6 +176,22 @@
       <div class="chart-card">
         <h3 class="chart-title">Likes vs Comments vs Saves</h3>
         <canvas id="chart-engagement-breakdown"></canvas>
+      </div>
+    </section>
+
+    <!-- Reels Performance -->
+    <section class="chart-grid">
+      <div class="chart-card wide">
+        <h3 class="chart-title">Top Reels by Plays</h3>
+        <canvas id="chart-reels"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3 class="chart-title">Reels Engagement Breakdown</h3>
+        <canvas id="chart-reels-engagement"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3 class="chart-title">Stories Performance</h3>
+        <canvas id="chart-stories"></canvas>
       </div>
     </section>
 
@@ -147,47 +211,10 @@
         </table>
       </div>
     </section>
-  </main>
-
-  <!-- Content Tab -->
-  <main id="tab-content" class="tab-content">
-    <section class="kpi-grid">
-      <div class="kpi-card accent">
-        <div class="kpi-label">Total Reels</div>
-        <div class="kpi-value" id="kpi-total-reels">--</div>
-      </div>
-      <div class="kpi-card accent">
-        <div class="kpi-label">Total Reel Plays</div>
-        <div class="kpi-value" id="kpi-total-reel-plays">--</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Avg Reel Reach</div>
-        <div class="kpi-value" id="kpi-avg-reel-reach">--</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Avg Reel Interactions</div>
-        <div class="kpi-value" id="kpi-avg-reel-interactions">--</div>
-      </div>
-    </section>
-
-    <section class="chart-grid">
-      <div class="chart-card wide">
-        <h3 class="chart-title">Top Reels by Plays</h3>
-        <canvas id="chart-reels"></canvas>
-      </div>
-      <div class="chart-card">
-        <h3 class="chart-title">Reels Engagement Breakdown</h3>
-        <canvas id="chart-reels-engagement"></canvas>
-      </div>
-      <div class="chart-card">
-        <h3 class="chart-title">Stories Performance</h3>
-        <canvas id="chart-stories"></canvas>
-      </div>
-    </section>
 
     <!-- Reels Table -->
     <section class="table-card">
-      <h3 class="chart-title">Recent Reels</h3>
+      <h3 class="chart-title">Recent Reels Performance</h3>
       <div class="table-wrapper">
         <table id="table-reels">
           <thead>
@@ -203,33 +230,66 @@
     </section>
   </main>
 
-  <!-- Ads Tab -->
+  <!-- ═══════════════════════════════════════════════════════════
+       TAB 3: ADS PERFORMANCE
+  ═══════════════════════════════════════════════════════════ -->
   <main id="tab-ads" class="tab-content">
+    <!-- Ads Pending Notice -->
     <div id="ads-pending" class="ads-pending-notice">
-      <h3>Ads Data Coming Soon</h3>
-      <p>Ads data will appear here once <code>ads_read</code> permission is approved by Meta (within 24 hours).</p>
-      <p>Once approved, generate a new access token with <code>ads_read</code> permission and update your Apps Script.</p>
+      <h3>Ads Data — Pending Permission</h3>
+      <p>Ads data will appear here once <code>ads_read</code> permission is approved by Meta.</p>
+      <p>Once approved, the dashboard will show: Daily Spend, CTR, CPC, CPM, Conversions, and Campaign breakdowns.</p>
+      <div class="benchmark-box">
+        <h4>US Benchmark Targets (Conversion Ads)</h4>
+        <div class="benchmark-grid">
+          <div class="benchmark-item">
+            <span class="benchmark-label">CTR</span>
+            <span class="benchmark-value">1.0% - 1.5%</span>
+          </div>
+          <div class="benchmark-item">
+            <span class="benchmark-label">CPC</span>
+            <span class="benchmark-value">$1.00 - $2.50</span>
+          </div>
+          <div class="benchmark-item">
+            <span class="benchmark-label">CPM</span>
+            <span class="benchmark-value">$5.00 - $15.00</span>
+          </div>
+        </div>
+      </div>
     </div>
 
+    <!-- Ads KPIs (hidden until data available) -->
     <section class="kpi-grid" id="ads-kpis" style="display:none;">
       <div class="kpi-card accent">
         <div class="kpi-label">Total Spend</div>
         <div class="kpi-value" id="kpi-total-spend">--</div>
       </div>
-      <div class="kpi-card accent">
-        <div class="kpi-label">Avg CPC</div>
-        <div class="kpi-value" id="kpi-avg-cpc">--</div>
-      </div>
-      <div class="kpi-card accent">
-        <div class="kpi-label">Avg CPM</div>
-        <div class="kpi-value" id="kpi-avg-cpm">--</div>
-      </div>
-      <div class="kpi-card accent">
-        <div class="kpi-label">Avg CTR</div>
+      <div class="kpi-card">
+        <div class="kpi-label">CTR</div>
         <div class="kpi-value" id="kpi-avg-ctr">--</div>
+        <div class="kpi-benchmark">Benchmark: 1.0-1.5%</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">CPC</div>
+        <div class="kpi-value" id="kpi-avg-cpc">--</div>
+        <div class="kpi-benchmark">Benchmark: $1.00-2.50</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">CPM</div>
+        <div class="kpi-value" id="kpi-avg-cpm">--</div>
+        <div class="kpi-benchmark">Benchmark: $5-15</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Total Clicks</div>
+        <div class="kpi-value" id="kpi-total-clicks">--</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Total Impressions</div>
+        <div class="kpi-value" id="kpi-total-impressions">--</div>
       </div>
     </section>
 
+    <!-- Ads Charts (hidden until data available) -->
     <section class="chart-grid" id="ads-charts" style="display:none;">
       <div class="chart-card wide">
         <h3 class="chart-title">Daily Ad Spend</h3>
@@ -245,7 +305,7 @@
       </div>
     </section>
 
-    <!-- Campaign Table -->
+    <!-- Campaign Table (hidden until data available) -->
     <section class="table-card" id="ads-table" style="display:none;">
       <h3 class="chart-title">Campaign Performance</h3>
       <div class="table-wrapper">
@@ -255,6 +315,123 @@
               <th>Campaign</th><th>Status</th><th>Impressions</th>
               <th>Reach</th><th>Clicks</th><th>Spend</th>
               <th>CPC</th><th>CPM</th><th>CTR</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       TAB 4: AUDIENCE A/B TEST
+  ═══════════════════════════════════════════════════════════ -->
+  <main id="tab-audience" class="tab-content">
+    <!-- A/B Test Pending Notice -->
+    <div id="ab-pending" class="ads-pending-notice">
+      <h3>A/B Test Results — Pending Ads Data</h3>
+      <p>This tab will compare performance across your 3 audience segments and creative variations once <code>ads_read</code> data is available.</p>
+      
+      <div class="ab-test-preview">
+        <h4>Test Matrix (from Campaign Plan)</h4>
+        <div class="ab-matrix">
+          <table class="ab-table">
+            <thead>
+              <tr>
+                <th>Audience</th>
+                <th>A: Beta Promo</th>
+                <th>B: Mustang Intro</th>
+                <th>C: Porsche Intro</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Petrolhead Collectors</strong></td>
+                <td>Group 1</td><td>Group 2</td><td>Group 3</td>
+              </tr>
+              <tr>
+                <td><strong>Curated Space Stylists</strong></td>
+                <td>Group 4</td><td>Group 5</td><td>Group 6</td>
+              </tr>
+              <tr>
+                <td><strong>Scale & Craft Enthusiasts</strong></td>
+                <td>Group 7</td><td>Group 8</td><td>Group 9</td>
+              </tr>
+              <tr class="retarget-row">
+                <td><strong>Website Retargeting</strong> <span class="phase-tag">Week 4+</span></td>
+                <td>Group 10</td><td colspan="2">—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="benchmark-box" style="margin-top: 20px;">
+          <h4>What We'll Compare</h4>
+          <div class="benchmark-grid">
+            <div class="benchmark-item">
+              <span class="benchmark-label">CTR by Audience</span>
+              <span class="benchmark-value">Which segment clicks most</span>
+            </div>
+            <div class="benchmark-item">
+              <span class="benchmark-label">CPC by Creative</span>
+              <span class="benchmark-value">Cheapest clicks per ad</span>
+            </div>
+            <div class="benchmark-item">
+              <span class="benchmark-label">Conversions</span>
+              <span class="benchmark-value">Best engagement-to-sale ratio</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- A/B Test Charts (hidden until data available) -->
+    <section class="kpi-grid" id="ab-kpis" style="display:none;">
+      <div class="kpi-card">
+        <div class="kpi-label">Best Audience</div>
+        <div class="kpi-value" id="kpi-best-audience">--</div>
+        <div class="kpi-sub" id="kpi-best-audience-detail">by CTR</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Best Creative</div>
+        <div class="kpi-value" id="kpi-best-creative">--</div>
+        <div class="kpi-sub" id="kpi-best-creative-detail">by CPC</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Lowest CPC</div>
+        <div class="kpi-value" id="kpi-lowest-cpc">--</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Highest CTR</div>
+        <div class="kpi-value" id="kpi-highest-ctr">--</div>
+      </div>
+    </section>
+
+    <section class="chart-grid" id="ab-charts" style="display:none;">
+      <div class="chart-card">
+        <h3 class="chart-title">CTR by Audience Segment</h3>
+        <canvas id="chart-audience-ctr"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3 class="chart-title">CPC by Creative</h3>
+        <canvas id="chart-creative-cpc"></canvas>
+      </div>
+      <div class="chart-card wide">
+        <h3 class="chart-title">Spend vs Clicks by Ad Group</h3>
+        <canvas id="chart-adgroup-performance"></canvas>
+      </div>
+    </section>
+
+    <!-- Ad Group Table (hidden until data available) -->
+    <section class="table-card" id="ab-table" style="display:none;">
+      <h3 class="chart-title">Ad Group Performance Comparison</h3>
+      <div class="table-wrapper">
+        <table id="table-adgroups">
+          <thead>
+            <tr>
+              <th>Ad Set (Audience)</th><th>Creative</th><th>Impressions</th>
+              <th>Clicks</th><th>CTR</th><th>CPC</th>
+              <th>Spend</th><th>Conversions</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -275,7 +452,7 @@
     <button onclick="this.parentElement.classList.add('hidden')">Dismiss</button>
   </div>
 
-  <!-- Scripts loaded in chunks -->
+  <!-- Scripts -->
   <script src="config.js"></script>
   <script src="charts.js"></script>
   <script src="ads.js"></script>
