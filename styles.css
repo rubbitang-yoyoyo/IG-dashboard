@@ -466,6 +466,235 @@ td.caption-cell {
   font-size: 13px;
 }
 
+/* ============ CAMPAIGN BANNER ============ */
+.campaign-banner {
+  display: flex;
+  gap: 24px;
+  padding: 20px 30px;
+  align-items: center;
+}
+
+.campaign-progress {
+  flex: 1;
+}
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.progress-track {
+  height: 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent) 0%, #ff6b7a 100%);
+  transition: width 0.5s ease;
+}
+
+.progress-phases {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+
+.phase-marker {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.campaign-budget {
+  text-align: center;
+  padding: 16px 24px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  min-width: 180px;
+}
+
+.budget-label {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.budget-value {
+  font-family: var(--font-heading);
+  font-size: 28px;
+  color: var(--text-primary);
+  margin: 4px 0;
+}
+
+.budget-spent {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--accent);
+}
+
+/* ============ FUNNEL ============ */
+.funnel-container {
+  padding: 20px 0;
+}
+
+.funnel-step {
+  margin-bottom: 8px;
+}
+
+.funnel-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(90deg, var(--accent) 0%, rgba(209, 51, 78, 0.3) 100%);
+  padding: 12px 16px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  transition: width 0.5s ease;
+}
+
+.funnel-bar.funnel-pending {
+  background: linear-gradient(90deg, var(--border-light) 0%, rgba(51, 51, 51, 0.3) 100%);
+  border: 1px dashed var(--border-light);
+}
+
+.funnel-label {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.funnel-value {
+  color: var(--text-secondary);
+}
+
+.funnel-note {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 12px;
+  text-align: center;
+  font-style: italic;
+}
+
+/* ============ BENCHMARK ============ */
+.benchmark-box {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  padding: 20px;
+  margin-top: 20px;
+  text-align: left;
+}
+
+.benchmark-box h4 {
+  font-family: var(--font-heading);
+  font-size: 16px;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.benchmark-grid {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.benchmark-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.benchmark-label {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.benchmark-value {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--success);
+  font-weight: 600;
+}
+
+.kpi-benchmark {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.kpi-sub {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ============ A/B TEST ============ */
+.ab-test-preview {
+  text-align: left;
+  margin-top: 24px;
+}
+
+.ab-test-preview h4 {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.ab-matrix {
+  overflow-x: auto;
+}
+
+.ab-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-body);
+  font-size: 13px;
+}
+
+.ab-table th {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+}
+
+.ab-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+
+.ab-table td strong {
+  color: var(--text-primary);
+}
+
+.retarget-row {
+  background: rgba(100, 150, 255, 0.08);
+}
+
+.phase-tag {
+  font-size: 10px;
+  color: var(--accent-light);
+  display: block;
+  margin-top: 2px;
+}
+
 /* ============ RESPONSIVE ============ */
 
 /* Tablet and below (768px) */
@@ -551,22 +780,70 @@ td.caption-cell {
     font-size: 14px;
   }
 
-  /* Tables responsive */
-  .table-container {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    margin: 0 -16px;
-    padding: 0 16px;
+  /* Campaign elements responsive */
+  .campaign-banner {
+    flex-direction: column;
+    padding: 16px;
+    gap: 16px;
   }
 
-  .data-table {
-    min-width: 600px;
+  .campaign-budget {
+    min-width: auto;
+    width: 100%;
+  }
+
+  .funnel-bar {
+    padding: 10px 12px;
     font-size: 12px;
   }
 
-  .data-table th,
-  .data-table td {
-    padding: 10px 12px;
+  .funnel-note {
+    font-size: 11px;
+  }
+
+  .benchmark-grid {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .ab-matrix {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .ab-table {
+    min-width: 400px;
+    font-size: 12px;
+  }
+
+  .ab-table th,
+  .ab-table td {
+    padding: 8px 10px;
+  }
+
+  .ads-pending-notice {
+    padding: 24px 16px;
+    margin: 16px;
+  }
+
+  .ads-pending-notice h3 {
+    font-size: 18px;
+  }
+
+  /* Tables responsive */
+  .table-card {
+    margin: 0;
+    padding: 16px;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table-wrapper table {
+    min-width: 600px;
+    font-size: 12px;
   }
 
   /* Section titles */
@@ -686,6 +963,41 @@ td.caption-cell {
   .refresh-indicator {
     font-size: 10px;
     padding: 4px 8px;
+  }
+
+  /* Campaign elements on phone */
+  .funnel-bar {
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+
+  .benchmark-box {
+    padding: 14px;
+  }
+
+  .benchmark-box h4 {
+    font-size: 14px;
+  }
+
+  .ads-pending-notice {
+    padding: 20px 12px;
+    margin: 12px;
+  }
+
+  .ads-pending-notice h3 {
+    font-size: 16px;
+  }
+
+  .ads-pending-notice p {
+    font-size: 12px;
+  }
+
+  .ab-test-preview h4 {
+    font-size: 14px;
+  }
+
+  .budget-value {
+    font-size: 22px;
   }
 }
 

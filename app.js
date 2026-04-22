@@ -208,12 +208,14 @@ function renderDashboard(days) {
     renderCpcCtrChart(ads);
     renderCampaignsTable(campaigns);
 
-    // A/B Test
-    updateABTestKPIs(ads);
-    renderAudienceCtrChart(ads);
-    renderCreativeCpcChart(ads);
-    renderAdGroupPerformanceChart(ads);
-    renderAdGroupsTable(ads);
+    // A/B Test (functions defined in ads.js)
+    if (typeof renderAudienceCtrChart === 'function') {
+      updateABTestKPIs(ads);
+      renderAudienceCtrChart(ads);
+      renderCreativeCpcChart(ads);
+      renderAdGroupPerformanceChart(ads);
+      renderAdGroupsTable(ads);
+    }
   }
 
   // Update timestamp
