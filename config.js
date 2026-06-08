@@ -112,17 +112,26 @@ async function loadAllData() {
       loaders.push(
         fetchSheetData(url)
           .then(data => {
-            // If sheet returns empty or just headers, fall back to demo
             if (!data || data.length === 0) {
-              console.warn(`${key} is empty, using demo data`);
-              DATA[key] = generateDemoData(key);
+              // For ads/campaigns, use empty array (not demo) when no real data
+              if (key === 'ads' || key === 'campaigns') {
+                console.warn(`${key} is empty, no data yet`);
+                DATA[key] = [];
+              } else {
+                console.warn(`${key} is empty, using demo data`);
+                DATA[key] = generateDemoData(key);
+              }
             } else {
               DATA[key] = data;
             }
           })
           .catch(err => {
             console.warn(`Failed to load ${key}:`, err);
-            DATA[key] = generateDemoData(key);
+            if (key === 'ads' || key === 'campaigns') {
+              DATA[key] = [];
+            } else {
+              DATA[key] = generateDemoData(key);
+            }
           })
       );
     } else {
