@@ -28,8 +28,13 @@ function renderDailySpendChart(adsData) {
   adsData.forEach(row => {
     const d = row.Date;
     if (!byDate[d]) byDate[d] = { spend: 0, clicks: 0 };
-    byDate[d].spend += parseFloat(row.Spend) || 0;
-    byDate[d].clicks += parseInt(row.Clicks) || 0;
+    // Use Spend if available, otherwise estimate from CPC * Link Clicks
+    let spend = parseFloat(row.Spend) || 0;
+    if (spend === 0) {
+      spend = (parseFloat(row.CPC) || 0) * (parseInt(row['Link Clicks']) || 0);
+    }
+    byDate[d].spend += spend;
+    byDate[d].clicks += parseInt(row['Link Clicks']) || parseInt(row.Clicks) || 0;
   });
 
   const dates = Object.keys(byDate).sort();
@@ -89,12 +94,21 @@ function renderCampaignSpendChart(campaigns) {
 
   ctx.parentElement.style.height = '300px';
 
+  // Compute spend: use Spend column, or estimate from CPC * Clicks
+  const spendData = campaigns.map(c => {
+    let spend = parseFloat(c.Spend) || 0;
+    if (spend === 0) {
+      spend = (parseFloat(c.CPC) || 0) * (parseInt(c.Clicks) || 0);
+    }
+    return spend;
+  });
+
   chartInstances['chart-campaign-spend'] = new Chart(ctx, {
     type: 'doughnut',
     data: {
       labels: campaigns.map(c => c['Campaign Name'] || 'Unknown'),
       datasets: [{
-        data: campaigns.map(c => parseFloat(c.Spend) || 0),
+        data: spendData,
         backgroundColor: ADS_COLORS.audiences.slice(0, campaigns.length),
         borderColor: '#1a1a1a',
         borderWidth: 4,
@@ -344,7 +358,12 @@ function renderCampaignTables(adsData, campaigns) {
         dailyBudget: 0
       };
     }
-    byCampaign[name].spend += parseFloat(row.Spend) || 0;
+    // Use Spend if available, otherwise estimate from CPC * Link Clicks
+    let rowSpend = parseFloat(row.Spend) || 0;
+    if (rowSpend === 0) {
+      rowSpend = (parseFloat(row.CPC) || 0) * (parseInt(row['Link Clicks']) || 0);
+    }
+    byCampaign[name].spend += rowSpend;
     byCampaign[name].pageVisits += parseInt(row['Page Visits']) || 0;
     byCampaign[name].clicks += parseInt(row.Clicks) || 0;
     byCampaign[name].conversions += parseInt(row.Conversions) || 0;

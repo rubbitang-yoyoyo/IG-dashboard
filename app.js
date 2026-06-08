@@ -111,8 +111,17 @@ function updateAdsKPIs(ads, campaigns) {
   show('ads-kpis');
   show('ads-charts');
 
-  const totalSpend = sumField(ads, 'Spend');
-  const totalClicks = sumField(ads, 'Clicks');
+  // Compute effective spend: if Spend column is 0 but CPC has values, estimate from CPC * Link Clicks
+  let totalSpend = sumField(ads, 'Spend');
+  if (totalSpend === 0) {
+    totalSpend = ads.reduce((sum, row) => {
+      const cpc = parseFloat(row['CPC']) || 0;
+      const linkClicks = parseInt(row['Link Clicks']) || 0;
+      return sum + (cpc * linkClicks);
+    }, 0);
+  }
+
+  const totalClicks = sumField(ads, 'Link Clicks') || sumField(ads, 'Clicks');
   const totalPV = sumField(ads, 'Page Visits');
   const avgCtr = avgField(ads, 'CTR');
   const avgCpc = avgField(ads, 'CPC');
