@@ -110,21 +110,20 @@ function updateAdsKPIs(ads, campaigns) {
   hide('ads-pending');
   show('ads-kpis');
   show('ads-charts');
-  show('ads-table');
 
   const totalSpend = sumField(ads, 'Spend');
   const totalClicks = sumField(ads, 'Clicks');
-  const totalImpressions = sumField(ads, 'Impressions');
+  const totalPV = sumField(ads, 'Page Visits');
   const avgCtr = avgField(ads, 'CTR');
   const avgCpc = avgField(ads, 'CPC');
-  const avgCpm = avgField(ads, 'CPM');
+  const costPerPV = totalPV > 0 ? totalSpend / totalPV : 0;
 
   setText('kpi-total-spend', formatCurrency(totalSpend));
+  setText('kpi-total-pv', formatNumber(totalPV));
+  setText('kpi-cost-per-pv', costPerPV > 0 ? formatCurrency(costPerPV) : '--');
   setText('kpi-avg-ctr', formatPercent(avgCtr));
   setText('kpi-avg-cpc', formatCurrency(avgCpc));
-  setText('kpi-avg-cpm', formatCurrency(avgCpm));
   setText('kpi-total-clicks', formatNumber(totalClicks));
-  setText('kpi-total-impressions', formatNumber(totalImpressions));
 
   // Budget remaining
   const el = document.getElementById('kpi-budget-remaining');
@@ -206,7 +205,7 @@ function renderDashboard(days) {
     renderDailySpendChart(ads);
     renderCampaignSpendChart(campaigns);
     renderCpcCtrChart(ads);
-    renderCampaignsTable(campaigns);
+    renderCampaignTables(ads, campaigns);
 
     // A/B Test (functions defined in ads.js)
     if (typeof renderAudienceCtrChart === 'function') {
