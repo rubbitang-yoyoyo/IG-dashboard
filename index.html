@@ -36,17 +36,17 @@
 
   <!-- Navigation Tabs -->
   <nav class="tabs">
-    <button class="tab active" data-tab="campaign">Overview</button>
-    <button class="tab" data-tab="organic">Organic & Content</button>
-    <button class="tab" data-tab="ads">Ads Performance</button>
-    <button class="tab" data-tab="audience">Audience A/B Test</button>
+    <button class="tab active" data-tab="overview">Account Overview</button>
+    <button class="tab" data-tab="ads-overview">Ads Overview</button>
+    <button class="tab" data-tab="traffic">Traffic Campaign</button>
+    <button class="tab" data-tab="conversion">Conversion Campaign</button>
   </nav>
 
   <!-- ═══════════════════════════════════════════════════════════
-       TAB 1: CAMPAIGN OVERVIEW
+       TAB 1: ACCOUNT OVERVIEW (Instagram Organic)
   ═══════════════════════════════════════════════════════════ -->
-  <main id="tab-campaign" class="tab-content active">
-    <!-- KPI Cards -->
+  <main id="tab-overview" class="tab-content active">
+    <!-- Account KPIs -->
     <section class="kpi-grid">
       <div class="kpi-card">
         <div class="kpi-label">Followers</div>
@@ -74,7 +74,7 @@
         <div class="kpi-change" id="kpi-engagement-change"></div>
       </div>
       <div class="kpi-card accent">
-        <div class="kpi-label">Reel Plays</div>
+        <div class="kpi-label">Total Reel Plays</div>
         <div class="kpi-value" id="kpi-reel-plays">--</div>
         <div class="kpi-change" id="kpi-reel-plays-change"></div>
       </div>
@@ -87,111 +87,24 @@
         <canvas id="chart-followers"></canvas>
       </div>
       <div class="chart-card">
-        <h3 class="chart-title">Daily Reach</h3>
+        <h3 class="chart-title">Daily Reach & Profile Views</h3>
         <canvas id="chart-reach"></canvas>
       </div>
       <div class="chart-card">
-        <h3 class="chart-title">Engagement Breakdown (Likes / Comments / Saves)</h3>
+        <h3 class="chart-title">Engagement (Likes / Comments / Saves)</h3>
         <canvas id="chart-engagement-overview"></canvas>
       </div>
     </section>
 
-    <!-- Funnel (placeholder until Pixel data is available) -->
+    <!-- Content Performance -->
     <section class="chart-grid">
-      <div class="chart-card wide">
-        <h3 class="chart-title">Conversion Funnel</h3>
-        <div class="funnel-container" id="funnel-container">
-          <div class="funnel-step">
-            <div class="funnel-bar" style="width:100%">
-              <span class="funnel-label">Profile Views</span>
-              <span class="funnel-value" id="funnel-profile-views">--</span>
-            </div>
-          </div>
-          <div class="funnel-step">
-            <div class="funnel-bar" style="width:75%">
-              <span class="funnel-label">Website Clicks</span>
-              <span class="funnel-value" id="funnel-website-clicks">--</span>
-            </div>
-          </div>
-          <div class="funnel-step">
-            <div class="funnel-bar funnel-pending" style="width:50%">
-              <span class="funnel-label">Add to Cart</span>
-              <span class="funnel-value">Needs Pixel</span>
-            </div>
-          </div>
-          <div class="funnel-step">
-            <div class="funnel-bar funnel-pending" style="width:25%">
-              <span class="funnel-label">Purchase</span>
-              <span class="funnel-value">Needs Pixel</span>
-            </div>
-          </div>
-        </div>
-        <p class="funnel-note">Full funnel tracking requires Meta Pixel installation on layture.com. Currently showing Instagram data only.</p>
-      </div>
-    </section>
-  </main>
-
-  <!-- ═══════════════════════════════════════════════════════════
-       TAB 2: ORGANIC & CONTENT
-  ═══════════════════════════════════════════════════════════ -->
-  <main id="tab-organic" class="tab-content">
-    <!-- Content KPIs -->
-    <section class="kpi-grid">
-      <div class="kpi-card">
-        <div class="kpi-label">Total Posts</div>
-        <div class="kpi-value" id="kpi-total-posts">--</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Total Reels</div>
-        <div class="kpi-value" id="kpi-total-reels">--</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Avg Likes / Post</div>
-        <div class="kpi-value" id="kpi-avg-likes">--</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Avg Comments / Post</div>
-        <div class="kpi-value" id="kpi-avg-comments">--</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Avg Saves / Post</div>
-        <div class="kpi-value" id="kpi-avg-saves">--</div>
-      </div>
-      <div class="kpi-card accent">
-        <div class="kpi-label">Total Reel Plays</div>
-        <div class="kpi-value" id="kpi-total-reel-plays">--</div>
-      </div>
-    </section>
-
-    <!-- Content Charts -->
-    <section class="chart-grid">
-      <div class="chart-card wide">
-        <h3 class="chart-title">Daily Reach & Profile Views</h3>
-        <canvas id="chart-organic-reach"></canvas>
-      </div>
       <div class="chart-card">
-        <h3 class="chart-title">Engagement by Post Type</h3>
-        <canvas id="chart-post-type"></canvas>
-      </div>
-      <div class="chart-card">
-        <h3 class="chart-title">Likes vs Comments vs Saves</h3>
-        <canvas id="chart-engagement-breakdown"></canvas>
-      </div>
-    </section>
-
-    <!-- Reels Performance -->
-    <section class="chart-grid">
-      <div class="chart-card wide">
         <h3 class="chart-title">Top Reels by Plays</h3>
         <canvas id="chart-reels"></canvas>
       </div>
       <div class="chart-card">
-        <h3 class="chart-title">Reels Engagement Breakdown</h3>
-        <canvas id="chart-reels-engagement"></canvas>
-      </div>
-      <div class="chart-card">
-        <h3 class="chart-title">Stories Performance</h3>
-        <canvas id="chart-stories"></canvas>
+        <h3 class="chart-title">Engagement by Post Type</h3>
+        <canvas id="chart-post-type"></canvas>
       </div>
     </section>
 
@@ -231,88 +144,70 @@
   </main>
 
   <!-- ═══════════════════════════════════════════════════════════
-       TAB 3: ADS PERFORMANCE
+       TAB 2: ADS OVERVIEW (All Campaigns Summary)
   ═══════════════════════════════════════════════════════════ -->
-  <main id="tab-ads" class="tab-content">
-    <!-- Ads Pending Notice -->
-    <div id="ads-pending" class="ads-pending-notice">
-      <h3>Ads Data — No Active Campaigns</h3>
-      <p>No ads data yet. Once you create and run campaigns in Meta Ads Manager, data will appear here automatically.</p>
-      <p>The dashboard will show: Spending, Page Visits, Cost per PV, Daily Budget, Interest &amp; Location targeting.</p>
-      <div class="benchmark-box">
-        <h4>HK Benchmark Targets</h4>
-        <div class="benchmark-grid">
-          <div class="benchmark-item">
-            <span class="benchmark-label">CTR</span>
-            <span class="benchmark-value">1.0% - 1.5%</span>
-          </div>
-          <div class="benchmark-item">
-            <span class="benchmark-label">CPC</span>
-            <span class="benchmark-value">HK$1.00 - 2.50</span>
-          </div>
-          <div class="benchmark-item">
-            <span class="benchmark-label">Cost per PV</span>
-            <span class="benchmark-value">HK$2.00 - 5.00</span>
-          </div>
-        </div>
-      </div>
+  <main id="tab-ads-overview" class="tab-content">
+    <!-- No Data Notice -->
+    <div id="ads-no-data" class="ads-pending-notice" style="display:none;">
+      <h3>No Ads Data Available</h3>
+      <p>Run <code>clearAndRefetchAds()</code> in Google Apps Script to pull campaign data.</p>
     </div>
 
-    <!-- Ads KPIs (hidden until data available) -->
-    <section class="kpi-grid" id="ads-kpis" style="display:none;">
+    <!-- Ads Summary KPIs -->
+    <section class="kpi-grid" id="ads-overview-kpis">
       <div class="kpi-card accent">
-        <div class="kpi-label">Total Spend (HKD)</div>
-        <div class="kpi-value" id="kpi-total-spend">--</div>
+        <div class="kpi-label">Total Ad Spend (HKD)</div>
+        <div class="kpi-value" id="kpi-all-spend">--</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label">Page Visits</div>
-        <div class="kpi-value" id="kpi-total-pv">--</div>
+        <div class="kpi-label">Total Page Visits</div>
+        <div class="kpi-value" id="kpi-all-pv">--</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label">Cost per PV (HKD)</div>
-        <div class="kpi-value" id="kpi-cost-per-pv">--</div>
+        <div class="kpi-label">Avg Cost per PV (HKD)</div>
+        <div class="kpi-value" id="kpi-all-cost-pv">--</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label">CTR</div>
-        <div class="kpi-value" id="kpi-avg-ctr">--</div>
-        <div class="kpi-benchmark">Benchmark: 1.0-1.5%</div>
+        <div class="kpi-label">Total Link Clicks</div>
+        <div class="kpi-value" id="kpi-all-clicks">--</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label">CPC (HKD)</div>
-        <div class="kpi-value" id="kpi-avg-cpc">--</div>
+        <div class="kpi-label">Avg CPC (HKD)</div>
+        <div class="kpi-value" id="kpi-all-cpc">--</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label">Total Clicks</div>
-        <div class="kpi-value" id="kpi-total-clicks">--</div>
+        <div class="kpi-label">Avg CTR</div>
+        <div class="kpi-value" id="kpi-all-ctr">--</div>
       </div>
     </section>
 
-    <!-- Ads Charts (hidden until data available) -->
-    <section class="chart-grid" id="ads-charts" style="display:none;">
+    <!-- Charts -->
+    <section class="chart-grid">
       <div class="chart-card wide">
-        <h3 class="chart-title">Daily Ad Spend</h3>
-        <canvas id="chart-daily-spend"></canvas>
+        <h3 class="chart-title">Daily Spend — All Campaigns</h3>
+        <canvas id="chart-all-daily-spend"></canvas>
       </div>
       <div class="chart-card">
         <h3 class="chart-title">Spend by Campaign</h3>
-        <canvas id="chart-campaign-spend"></canvas>
+        <canvas id="chart-spend-by-campaign"></canvas>
       </div>
       <div class="chart-card">
-        <h3 class="chart-title">CPC vs CTR Trend</h3>
-        <canvas id="chart-cpc-ctr"></canvas>
+        <h3 class="chart-title">CPC Trend — All Campaigns</h3>
+        <canvas id="chart-all-cpc-trend"></canvas>
       </div>
     </section>
 
-    <!-- Traffic Campaign Table -->
-    <section class="table-card" id="ads-traffic-table" style="display:none;">
-      <h3 class="chart-title">Traffic Campaigns</h3>
+    <!-- Top 5 Best Performing Creatives -->
+    <section class="table-card">
+      <h3 class="chart-title">Top 5 Best Performing Creatives</h3>
+      <p class="section-subtitle">Ranked by lowest Cost per Page Visit</p>
       <div class="table-wrapper">
-        <table id="table-traffic-campaigns">
+        <table id="table-top-creatives">
           <thead>
             <tr>
-              <th>Campaign</th><th>Spending (HKD)</th><th>Page Visits</th>
-              <th>Cost per PV (HKD)</th><th>Daily Budget (HKD)</th>
-              <th>Interest</th><th>Location</th>
+              <th>#</th><th>Ad Name</th><th>Ad Set (Audience)</th>
+              <th>Spend (HKD)</th><th>Page Visits</th><th>Cost/PV (HKD)</th>
+              <th>Link Clicks</th><th>CTR</th><th>CPC (HKD)</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -320,34 +215,16 @@
       </div>
     </section>
 
-    <!-- Conversion Campaign Table -->
-    <section class="table-card" id="ads-conversion-table" style="display:none;">
-      <h3 class="chart-title">Conversion Campaigns</h3>
+    <!-- Campaign Summary Table -->
+    <section class="table-card">
+      <h3 class="chart-title">Campaign Summary</h3>
       <div class="table-wrapper">
-        <table id="table-conversion-campaigns">
+        <table id="table-campaign-summary">
           <thead>
             <tr>
-              <th>Campaign</th><th>Interest</th><th>Location</th>
-              <th>Spending (HKD)</th><th>Conversions</th>
-              <th>Cost per PV (HKD)</th><th>Daily Budget (HKD)</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- All Campaigns Table (fallback if no objective distinction) -->
-    <section class="table-card" id="ads-table" style="display:none;">
-      <h3 class="chart-title">All Campaign Performance</h3>
-      <div class="table-wrapper">
-        <table id="table-campaigns">
-          <thead>
-            <tr>
-              <th>Campaign</th><th>Objective</th><th>Spending (HKD)</th>
-              <th>Page Visits</th><th>Cost per PV (HKD)</th>
-              <th>Clicks</th><th>Daily Budget (HKD)</th>
-              <th>Conversions</th><th>Interest</th><th>Location</th>
+              <th>Campaign</th><th>Objective</th><th>Status</th>
+              <th>Spend (HKD)</th><th>Page Visits</th><th>Cost/PV (HKD)</th>
+              <th>Link Clicks</th><th>CPC (HKD)</th><th>CTR</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -357,114 +234,167 @@
   </main>
 
   <!-- ═══════════════════════════════════════════════════════════
-       TAB 4: AUDIENCE A/B TEST
+       TAB 3: TRAFFIC CAMPAIGN
   ═══════════════════════════════════════════════════════════ -->
-  <main id="tab-audience" class="tab-content">
-    <!-- A/B Test Pending Notice -->
-    <div id="ab-pending" class="ads-pending-notice">
-      <h3>A/B Test Results — Pending Ads Data</h3>
-      <p>This tab will compare performance across your 3 audience segments and creative variations once <code>ads_read</code> data is available.</p>
-      
-      <div class="ab-test-preview">
-        <h4>Test Matrix (from Campaign Plan)</h4>
-        <div class="ab-matrix">
-          <table class="ab-table">
-            <thead>
-              <tr>
-                <th>Audience</th>
-                <th>A: Beta Promo</th>
-                <th>B: Mustang Intro</th>
-                <th>C: Porsche Intro</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>Petrolhead Collectors</strong></td>
-                <td>Group 1</td><td>Group 2</td><td>Group 3</td>
-              </tr>
-              <tr>
-                <td><strong>Curated Space Stylists</strong></td>
-                <td>Group 4</td><td>Group 5</td><td>Group 6</td>
-              </tr>
-              <tr>
-                <td><strong>Scale & Craft Enthusiasts</strong></td>
-                <td>Group 7</td><td>Group 8</td><td>Group 9</td>
-              </tr>
-              <tr class="retarget-row">
-                <td><strong>Website Retargeting</strong> <span class="phase-tag">Week 4+</span></td>
-                <td>Group 10</td><td colspan="2">—</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="benchmark-box" style="margin-top: 20px;">
-          <h4>What We'll Compare</h4>
-          <div class="benchmark-grid">
-            <div class="benchmark-item">
-              <span class="benchmark-label">CTR by Audience</span>
-              <span class="benchmark-value">Which segment clicks most</span>
-            </div>
-            <div class="benchmark-item">
-              <span class="benchmark-label">CPC by Creative</span>
-              <span class="benchmark-value">Cheapest clicks per ad</span>
-            </div>
-            <div class="benchmark-item">
-              <span class="benchmark-label">Conversions</span>
-              <span class="benchmark-value">Best engagement-to-sale ratio</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- A/B Test Charts (hidden until data available) -->
-    <section class="kpi-grid" id="ab-kpis" style="display:none;">
-      <div class="kpi-card">
-        <div class="kpi-label">Best Audience</div>
-        <div class="kpi-value" id="kpi-best-audience">--</div>
-        <div class="kpi-sub" id="kpi-best-audience-detail">by CTR</div>
+  <main id="tab-traffic" class="tab-content">
+    <!-- Traffic KPIs -->
+    <section class="kpi-grid" id="traffic-kpis">
+      <div class="kpi-card accent">
+        <div class="kpi-label">Traffic Spend (HKD)</div>
+        <div class="kpi-value" id="kpi-traffic-spend">--</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label">Best Creative</div>
-        <div class="kpi-value" id="kpi-best-creative">--</div>
-        <div class="kpi-sub" id="kpi-best-creative-detail">by CPC</div>
+        <div class="kpi-label">Page Visits</div>
+        <div class="kpi-value" id="kpi-traffic-pv">--</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label">Lowest CPC</div>
-        <div class="kpi-value" id="kpi-lowest-cpc">--</div>
+        <div class="kpi-label">Cost per PV (HKD)</div>
+        <div class="kpi-value" id="kpi-traffic-cost-pv">--</div>
+        <div class="kpi-benchmark">Target: &lt; HK$2.00</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label">Highest CTR</div>
-        <div class="kpi-value" id="kpi-highest-ctr">--</div>
+        <div class="kpi-label">Link Clicks</div>
+        <div class="kpi-value" id="kpi-traffic-clicks">--</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">CPC (HKD)</div>
+        <div class="kpi-value" id="kpi-traffic-cpc">--</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">CTR</div>
+        <div class="kpi-value" id="kpi-traffic-ctr">--</div>
+        <div class="kpi-benchmark">Benchmark: &gt; 5%</div>
       </div>
     </section>
 
-    <section class="chart-grid" id="ab-charts" style="display:none;">
-      <div class="chart-card">
-        <h3 class="chart-title">CTR by Audience Segment</h3>
-        <canvas id="chart-audience-ctr"></canvas>
-      </div>
-      <div class="chart-card">
-        <h3 class="chart-title">CPC by Creative</h3>
-        <canvas id="chart-creative-cpc"></canvas>
-      </div>
+    <!-- Charts -->
+    <section class="chart-grid">
       <div class="chart-card wide">
-        <h3 class="chart-title">Spend vs Clicks by Ad Group</h3>
-        <canvas id="chart-adgroup-performance"></canvas>
+        <h3 class="chart-title">Daily Spend — Traffic Campaign</h3>
+        <canvas id="chart-traffic-daily-spend"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3 class="chart-title">Cost per Page Visit Trend</h3>
+        <canvas id="chart-traffic-cost-pv-trend"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3 class="chart-title">Page Visits by Ad Set</h3>
+        <canvas id="chart-traffic-pv-by-adset"></canvas>
       </div>
     </section>
 
-    <!-- Ad Group Table (hidden until data available) -->
-    <section class="table-card" id="ab-table" style="display:none;">
-      <h3 class="chart-title">Ad Group Performance Comparison</h3>
+    <!-- Top 5 Traffic Creatives -->
+    <section class="table-card">
+      <h3 class="chart-title">Top 5 Traffic Creatives</h3>
+      <p class="section-subtitle">Ranked by lowest Cost per Page Visit</p>
       <div class="table-wrapper">
-        <table id="table-adgroups">
+        <table id="table-traffic-top-creatives">
           <thead>
             <tr>
-              <th>Ad Set (Audience)</th><th>Creative</th><th>Impressions</th>
-              <th>Clicks</th><th>CTR</th><th>CPC</th>
-              <th>Spend</th><th>Conversions</th>
+              <th>#</th><th>Ad Name</th><th>Ad Set (Audience)</th>
+              <th>Page Visits</th><th>Cost/PV (HKD)</th>
+              <th>Spend (HKD)</th><th>CTR</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Traffic Ad Set Breakdown -->
+    <section class="table-card">
+      <h3 class="chart-title">Ad Set Breakdown</h3>
+      <div class="table-wrapper">
+        <table id="table-traffic-adsets">
+          <thead>
+            <tr>
+              <th>Ad Set</th><th>Interest Targeting</th><th>Location</th>
+              <th>Spend (HKD)</th><th>Page Visits</th><th>Cost/PV (HKD)</th>
+              <th>Link Clicks</th><th>CPC (HKD)</th><th>CTR</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       TAB 4: CONVERSION CAMPAIGN
+  ═══════════════════════════════════════════════════════════ -->
+  <main id="tab-conversion" class="tab-content">
+    <!-- Conversion KPIs -->
+    <section class="kpi-grid" id="conversion-kpis">
+      <div class="kpi-card accent">
+        <div class="kpi-label">Conversion Spend (HKD)</div>
+        <div class="kpi-value" id="kpi-conv-spend">--</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Add to Cart</div>
+        <div class="kpi-value" id="kpi-conv-atc">--</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Initiate Checkout</div>
+        <div class="kpi-value" id="kpi-conv-checkout">--</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Page Visits</div>
+        <div class="kpi-value" id="kpi-conv-pv">--</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Cost per PV (HKD)</div>
+        <div class="kpi-value" id="kpi-conv-cost-pv">--</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">CPC (HKD)</div>
+        <div class="kpi-value" id="kpi-conv-cpc">--</div>
+      </div>
+    </section>
+
+    <!-- Charts -->
+    <section class="chart-grid">
+      <div class="chart-card wide">
+        <h3 class="chart-title">Daily Spend — Conversion Campaign</h3>
+        <canvas id="chart-conv-daily-spend"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3 class="chart-title">Cost per Page Visit Trend</h3>
+        <canvas id="chart-conv-cost-pv-trend"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3 class="chart-title">Page Visits by Ad Set</h3>
+        <canvas id="chart-conv-pv-by-adset"></canvas>
+      </div>
+    </section>
+
+    <!-- Top 5 Conversion Creatives -->
+    <section class="table-card">
+      <h3 class="chart-title">Top 5 Conversion Creatives</h3>
+      <p class="section-subtitle">Ranked by lowest Cost per Page Visit</p>
+      <div class="table-wrapper">
+        <table id="table-conv-top-creatives">
+          <thead>
+            <tr>
+              <th>#</th><th>Ad Name</th><th>Ad Set (Audience)</th>
+              <th>Page Visits</th><th>Cost/PV (HKD)</th>
+              <th>Spend (HKD)</th><th>CTR</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Conversion Ad Set Breakdown -->
+    <section class="table-card">
+      <h3 class="chart-title">Ad Set Breakdown</h3>
+      <div class="table-wrapper">
+        <table id="table-conv-adsets">
+          <thead>
+            <tr>
+              <th>Ad Set</th><th>Interest Targeting</th><th>Location</th>
+              <th>Spend (HKD)</th><th>Page Visits</th><th>Cost/PV (HKD)</th>
+              <th>Link Clicks</th><th>CPC (HKD)</th><th>CTR</th>
             </tr>
           </thead>
           <tbody></tbody>

@@ -323,7 +323,9 @@ function formatNumber(num) {
 }
 
 function formatCurrency(num) {
-  return DASHBOARD_CONFIG.currencySymbol + parseFloat(num).toFixed(2);
+  const val = parseFloat(num) || 0;
+  const formatted = val.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return DASHBOARD_CONFIG.currencySymbol + formatted;
 }
 
 function formatPercent(num) {
@@ -357,4 +359,16 @@ function calcChange(current, previous) {
     label: (change >= 0 ? '+' : '') + change.toFixed(1) + '%',
     class: change > 0 ? 'positive' : change < 0 ? 'negative' : 'neutral',
   };
+}
+
+/** Compute effective spend for a single ad row (fallback: CPC * Link Clicks) */
+function getSpend(row) {
+  const spend = parseFloat(row['Spend']) || 0;
+  if (spend > 0) return spend;
+  return (parseFloat(row['CPC']) || 0) * (parseInt(row['Link Clicks']) || 0);
+}
+
+/** Compute total spend for an array of ad rows */
+function totalSpend(rows) {
+  return rows.reduce((sum, row) => sum + getSpend(row), 0);
 }
